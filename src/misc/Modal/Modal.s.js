@@ -45,7 +45,7 @@ export default StyleSheet.create({
     margin: 2,
     borderRadius: 20,
     backgroundColor: appColors.lightPurple,
-    flex: 1,
+    // flex: 1,
   },
   buttonText: {
     color: appColors.text,

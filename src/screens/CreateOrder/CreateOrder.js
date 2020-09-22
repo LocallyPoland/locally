@@ -10,14 +10,12 @@ import Step5 from "../Steps/Step5/Step5";
 import StepWrapper from "../../wrappers/StepWrapper/StepWrapper";
 import { immediateStepNames, stepNames } from "../../utils/utils";
 import { createOrderAction } from "../../store/actions/orderActions";
+import * as yup from "yup"; // for everything
 
 const CreateOrder = (props) => {
   const [stepNumber, setStepNumber] = useState(1);
-  const { route, navigation, handleSubmit, user } = props;
+  const { route, navigation, handleSubmit, user, validateForm } = props;
   const moveToNextStep = () => setStepNumber(stepNumber + 1);
-
-  console.log("handle submit ===", handleSubmit);
-  console.log("user ===", user);
 
   const isImmediateOrder = route?.params?.isImmediateOrder;
 
@@ -28,7 +26,9 @@ const CreateOrder = (props) => {
     setStepNumber(stepNumber - 1);
   };
 
-  console.log("stepNumber ===", stepNumber);
+  useEffect(() => {
+    validateForm();
+  }, []);
 
   return (
     <StepWrapper
@@ -94,24 +94,36 @@ const CreateOrder = (props) => {
 const formikHOC = withFormik({
   mapPropsToValues: ({ user }) => ({
     // delivery: "",
-    pickUp: "ul. Rynek 5",
+    pickUp: "",
     paymentType: "cash",
     userID: user._id,
-    sum: 200,
-    weight: 10,
+    sum: 0,
+    weight: 0,
     status: "done",
-    length: 20,
+    length: 0,
     parcel: "box",
-    deliveryTime: new Date().toISOString(),
+    deliveryTime: {
+      hours: 12,
+      minutes: 30,
+    },
     deliveryCity: "Rzeszow",
-    deliveryStreet: "Rynek",
-    deliveryHouse: "1A",
+    deliveryStreet: "",
+    deliveryHouse: "",
   }),
   handleSubmit: (values, { props: { createOrder, user } }) => {
     console.log("order values ===", values);
     console.log("user token ===", user.token);
     createOrder(values, user.token);
   },
+  validationSchema: yup.object().shape({
+    pickUp: yup.string().required(),
+    userID: yup.string().required(),
+    deliveryCity: yup.string().required(),
+    deliveryStreet: yup.string().required(),
+    deliveryHouse: yup.string().required(),
+    weight: yup.number(),
+    length: yup.number(),
+  }),
 })(CreateOrder);
 
 const mapStateToProps = (state) => ({

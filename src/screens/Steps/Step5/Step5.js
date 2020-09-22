@@ -10,11 +10,14 @@ import classnames from "classnames-react-native";
 import Button from "../../../misc/Button/Button";
 import AddItemView from "../../../misc/AddItemView/AddItemView";
 
-const Step5 = ({ onSubmit, cards, navigation }) => {
+const Step5 = ({ onSubmit, cards, navigation, values, errors }) => {
   const redirectToAddCard = () =>
     navigation.navigate("AddCard", {
       goBack: true,
     });
+
+  const { status, price, weight, length, delivery, pickUp } = values;
+
   return (
     <ScrollView>
       <View style={s.container}>
@@ -23,13 +26,13 @@ const Step5 = ({ onSubmit, cards, navigation }) => {
             onlyBaseInfo
             containerStyle={s.infoContainer}
             item={{
-              status: "coming",
-              price: 25.21,
-              maxWeight: 40,
-              maxHeight: 5,
+              status,
+              price,
+              maxWeight: weight,
+              maxHeight: length,
               address: {
-                from: "ul. Rynek 3",
-                to: "ul. Lewakowskiego 12/55",
+                from: pickUp,
+                to: delivery,
               },
             }}
           />

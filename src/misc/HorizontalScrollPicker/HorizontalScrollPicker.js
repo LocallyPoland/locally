@@ -28,12 +28,9 @@ const HorizontalScrollPicker = ({
     const value =
       Math.round(x / itemWidth) + Math.floor(layoutWidth / itemWidth / 2);
     setActiveItem(value * itemsStep);
-    console.log("value ===", value);
   };
 
   const onMomentumScrollEnd = ({ nativeEvent }) => {
-    console.log("index ===", activeItem / itemsStep - 1);
-    console.log("active item ===", activeItem);
     scrollRef.current.scrollToIndex({ index: activeItem / itemsStep - 1 });
   };
 

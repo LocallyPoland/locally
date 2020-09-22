@@ -15,6 +15,7 @@ import {
   logoutAction,
 } from "../../store/actions/profileActions";
 import AdaptiveWrapper from "../../wrappers/AdaptiveWrapper/AdaptiveWrapper";
+import * as yup from "yup";
 
 const Profile = ({
   values,
@@ -117,6 +118,15 @@ const formikHOC = withFormik({
       password,
     };
   },
+  validationSchema: yup.object().shape({
+    pickUp: yup.string().required(),
+    userID: yup.string().required(),
+    deliveryCity: yup.string().required(),
+    deliveryStreet: yup.string().required(),
+    deliveryHouse: yup.string().required(),
+    weight: yup.number(),
+    length: yup.number(),
+  }),
   handleSubmit: async (values, { props: { editUser, user } }) => {
     console.log("values ===", values);
     const isSuccess = await editUser(

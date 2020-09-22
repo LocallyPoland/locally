@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import s from "./StepWrapper.s";
 import MainWrapper from "../MainWrapper/MainWrapper";
 import {
@@ -37,6 +37,8 @@ const StepWrapper = ({
   onBackPress,
 }) => {
   const redirectToStep = (number) => setStepNumber(number || stepNumber + 1);
+
+  useEffect(() => {}, []);
 
   return (
     <MainWrapper {...{ onBackPress }}>

@@ -11,7 +11,7 @@ import Button from "../../../misc/Button/Button";
 import AdaptiveWrapper from "../../../wrappers/AdaptiveWrapper/AdaptiveWrapper";
 import { mwp } from "../../../utils/utils";
 
-const Step2 = ({ handleChange, values, onSubmit, stepNumber }) => {
+const Step2 = ({ handleChange, values, onSubmit, stepNumber, errors }) => {
   console.log("values step2 ===", values);
   return (
     <View>
@@ -62,8 +62,9 @@ const Step2 = ({ handleChange, values, onSubmit, stepNumber }) => {
       <Button
         onPress={onSubmit}
         style={s.button}
+        disabled={errors.delivery}
         textStyle={s.buttonText}
-        title={`Następny krok > 0${stepNumber + 1}`}
+        title={`Następny krok ${stepNumber + 1}`}
       />
     </View>
   );

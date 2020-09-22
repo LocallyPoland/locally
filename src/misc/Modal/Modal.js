@@ -82,7 +82,7 @@ const Modal = ({
                 />
               )}
             </View>
-            {!onResolve && !onResolve && (
+            {!onResolve && (
               <Button
                 style={s.button}
                 textStyle={s.buttonText}

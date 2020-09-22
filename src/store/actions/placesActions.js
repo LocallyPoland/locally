@@ -2,16 +2,22 @@ import { deletePlace, getPlaces, patchPlace, postPlace } from "../api/api";
 import { store } from "../store";
 import { ADD_PLACE, DELETE_PLACE, EDIT_PLACE, SET_PLACES } from "./actionTypes";
 
-export const createPlaceAction = (place) => {
+export const createPlaceAction = (place, onReject) => {
   return async (dispatch) => {
     const {
       profile: { token },
     } = store.getState();
-    const response = await postPlace(place, token);
-    if (response?.status === 200) {
-      dispatch({ type: ADD_PLACE, place: response.data });
-    }
-    return response?.status === 200;
+    console.log("token ===", token);
+    return postPlace(place, token)
+      .then((response) => {
+        dispatch({ type: ADD_PLACE, place: response.data });
+        return true;
+      })
+      .catch((e) => {
+        onReject();
+        return false;
+      });
+    console.log("is success ===", isSuccess);
   };
 };
 

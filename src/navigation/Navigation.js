@@ -29,7 +29,6 @@ const Stack = createStackNavigator();
 const Navigation = ({ profile }) => {
   const fontState = FontState();
   const isLogged = !!profile._id;
-  console.log("profile ===", profile);
   return (
     !!fontState.fontsLoaded && (
       <FontContext.Provider value={fontState}>

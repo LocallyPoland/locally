@@ -1,20 +1,30 @@
-import React from "react";
+import React, { useEffect } from "react";
 import s from "./Register.s";
 import MainWrapper from "../../wrappers/MainWrapper/MainWrapper";
 import { withFormik } from "formik";
 import { Text, View, TouchableOpacity, ScrollView } from "react-native";
-import {
-  heightPercentageToDP as hp,
-  widthPercentageToDP as wp,
-} from "react-native-responsive-screen";
 import SvgUri from "react-native-svg-uri";
 import Input from "../../misc/Input/Input";
 import Button from "../../misc/Button/Button";
 import { connect } from "react-redux";
 import { registerAction } from "../../store/actions/profileActions";
 
-const Register = ({ values, handleChange, navigation, handleSubmit }) => {
+const Register = ({
+  values,
+  handleChange,
+  navigation,
+  handleSubmit,
+  errors,
+  validateForm,
+  touched,
+  handleBlur,
+}) => {
   const redirectToLogin = () => navigation.navigate("Login");
+
+  useEffect(() => {
+    validateForm();
+  }, []);
+
   return (
     <MainWrapper style={s.container} onBackPress={navigation.goBack}>
       <ScrollView>
@@ -25,6 +35,8 @@ const Register = ({ values, handleChange, navigation, handleSubmit }) => {
               placeholder="Jimmy"
               onChangeText={handleChange("fName")}
               value={values.fName}
+              onBlur={handleBlur("fName")}
+              isError={errors.fName && touched.fName}
               containerStyle={s.inputRowContainer}
               label="Imie"
             />
@@ -32,6 +44,8 @@ const Register = ({ values, handleChange, navigation, handleSubmit }) => {
               placeholder="Carr"
               onChangeText={handleChange("lName")}
               value={values.lName}
+              onBlur={handleBlur("lName")}
+              isError={errors.lName && touched.lName}
               containerStyle={{ ...s.inputRowContainer, marginRight: 0 }}
               label="Nazwisko"
             />
@@ -40,6 +54,8 @@ const Register = ({ values, handleChange, navigation, handleSubmit }) => {
             placeholder="567 867 316"
             onChangeText={handleChange("phone")}
             value={values.phone}
+            onBlur={handleBlur("phone")}
+            isError={errors.phone && touched.phone}
             mask="+48-999-999-999"
             containerStyle={s.inputContainer}
             label="Telefon"
@@ -48,6 +64,8 @@ const Register = ({ values, handleChange, navigation, handleSubmit }) => {
             placeholder="email"
             onChangeText={handleChange("email")}
             value={values.email}
+            onBlur={handleBlur("email")}
+            isError={errors.email && touched.email}
             containerStyle={s.inputContainer}
             label="e-mail"
           />
@@ -55,6 +73,8 @@ const Register = ({ values, handleChange, navigation, handleSubmit }) => {
             placeholder="********"
             secureTextEntry
             value={values.password}
+            onBlur={handleBlur("password")}
+            isError={errors.password && touched.password}
             onChangeText={handleChange("password")}
             containerStyle={s.inputContainer}
             label="password"
@@ -62,6 +82,7 @@ const Register = ({ values, handleChange, navigation, handleSubmit }) => {
           <Button
             title="Login"
             onPress={handleSubmit}
+            disabled={!!Object.keys(errors).length}
             style={s.buttonContainer}
           />
           <Text style={s.secondaryText}>albo</Text>
@@ -97,6 +118,24 @@ const formikHoc = withFormik({
     lName: "",
     phone: "",
   }),
+  validateOnMount: true,
+  validate: (values) => {
+    const errors = {};
+    const { email, password } = values;
+    const emailRegex = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+    Object.entries(values).forEach(([key, value]) => {
+      if (!value?.length) {
+        errors[key] = "required";
+      }
+    });
+    if (!emailRegex.test(email)) {
+      errors.email = "invalid email";
+    }
+    if (password.length < 5) {
+      errors.password = "password length less that 6";
+    }
+    return errors;
+  },
   handleSubmit: async (
     values,
     { props: { register, navigation, showModal }, resetForm }

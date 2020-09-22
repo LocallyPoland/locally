@@ -1,9 +1,9 @@
-import React from "react";
+import React, { useEffect, useRef } from "react";
 import s from "./CreatePlace.s";
 import { withFormik } from "formik";
 import { connect } from "react-redux";
 import MainWrapper from "../../wrappers/MainWrapper/MainWrapper";
-import { ScrollView, Text, View } from "react-native";
+import { ScrollView, Text, View, Keyboard } from "react-native";
 import SvgUri from "react-native-svg-uri";
 import { widthPercentageToDP as wp } from "react-native-responsive-screen";
 import OuterShadowWrapper from "../../wrappers/OuterShadowWrapper/OuterShadowWrapper";
@@ -14,6 +14,7 @@ import {
   editPlaceAction,
 } from "../../store/actions/placesActions";
 import classnames from "classnames-react-native";
+import { showModalAction } from "../../store/actions/baseActions";
 
 const CreatePlace = ({
   handleChange,
@@ -22,10 +23,24 @@ const CreatePlace = ({
   navigation,
   route: { params },
 }) => {
-  const isEditing = !!params.place;
+  const scrollRef = useRef();
+  const isEditing = !!params?.place;
+
+  const onKeyboardDidShow = () => {
+    scrollRef.current.scrollToEnd();
+  };
+
+  useEffect(() => {
+    Keyboard.addListener("keyboardDidShow", onKeyboardDidShow);
+
+    // cleanup function
+    return () => {
+      Keyboard.removeListener("keyboardDidShow", onKeyboardDidShow);
+    };
+  }, []);
   return (
     <MainWrapper style={s.container} onBackPress={navigation.goBack}>
-      <ScrollView contentContainerStyle={{ flex: 1 }}>
+      <ScrollView ref={scrollRef}>
         <View style={{ flex: 1 }}>
           <Text style={s.title}>
             {isEditing ? "Zmienić addres" : "Dodaj addres"}
@@ -95,17 +110,19 @@ const formikHOC = withFormik({
         createPlace,
         editPlace,
         navigation,
+        showModal,
         route: { params },
       },
       resetForm,
     }
   ) => {
     let isSuccess = false;
-    console.log("place ===", params?.place);
     if (params?.place) {
       isSuccess = await editPlace(values, params.place._id);
     } else {
-      isSuccess = await createPlace(values);
+      isSuccess = await createPlace(values, () =>
+        showModal("Bląd tworzenia", "Podczas tworzenia wystąpił problem")
+      );
     }
     if (isSuccess) {
       navigation.goBack();
@@ -115,13 +132,16 @@ const formikHOC = withFormik({
         deliveryStreet: "",
         deliveryApartament: "",
       });
+    } else {
     }
   },
 })(CreatePlace);
 
 const mapStateToProps = (state) => ({});
 const mapDispatchToProps = (dispatch) => ({
-  createPlace: (place) => dispatch(createPlaceAction(place)),
+  createPlace: (place, onReject) =>
+    dispatch(createPlaceAction(place, onReject)),
+  showModal: (title, desc) => dispatch(showModalAction(title, desc)),
   editPlace: (place, id) => dispatch(editPlaceAction(place, id)),
 });
 

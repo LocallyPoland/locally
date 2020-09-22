@@ -1,6 +1,6 @@
 import { StyleSheet } from "react-native";
 import { appColors } from "../../styles/styles";
-import { mwp } from "../../utils/utils";
+import { mhp, mwp } from "../../utils/utils";
 import {
   heightPercentageToDP as hp,
   widthPercentageToDP as wp,
@@ -16,7 +16,7 @@ export default StyleSheet.create({
   card: {
     padding: 15,
     borderRadius: 25,
-    height: mwp(40, 300, 100),
+    height: mhp(15, 300, 100),
   },
   cardTitle: {
     color: appColors.darkBlue,

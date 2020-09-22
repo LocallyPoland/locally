@@ -13,6 +13,7 @@ export default StyleSheet.create({
   container: {
     marginTop: hp(12),
     alignItems: "center",
+    minHeight: hp(100),
   },
   title: {
     fontFamily: "PoppinsBold",

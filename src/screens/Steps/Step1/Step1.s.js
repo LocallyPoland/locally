@@ -49,7 +49,7 @@ export default StyleSheet.create({
     alignItems: "center",
   },
   autocompleteItemText: {
-    marginHorizontal: 15,
+    marginHorizontal: 8,
     fontFamily: "PoppinsSemiBold",
     color: appColors.darkBlue,
   },

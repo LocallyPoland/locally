@@ -26,8 +26,7 @@ const Login = ({
 }) => {
   const redirectToRegister = () => navigation.navigate("Register");
   const redirectToRestore = () => navigation.navigate("RestorePassword");
-  console.log("errors ===", errors);
-  console.log("touched ===", touched);
+
   return (
     <MainWrapper style={s.container} onBackPress={navigation.goBack}>
       <Text style={s.title}>Login</Text>
@@ -70,10 +69,7 @@ const Login = ({
           onPress={handleSubmit}
           style={s.buttonContainer}
           disabled={
-            errors.email ||
-            errors.password ||
-            !touched.email ||
-            !touched.password
+            errors.email || errors.password || !values.email || !values.password
           }
         />
         <Text style={s.secondaryText}>albo</Text>

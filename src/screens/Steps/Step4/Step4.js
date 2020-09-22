@@ -16,7 +16,7 @@ import InnerShadowWrapper from "../../../wrappers/InnerShadowWrapper/InnerShadow
 import classnames from "classnames-react-native";
 import { appColors } from "../../../styles/styles";
 
-const Step4 = ({ values, setValues, onSubmit, stepNumber }) => {
+const Step4 = ({ values, setValues, onSubmit, stepNumber, errors }) => {
   const setMailType = () => {
     setValues({
       ...values,
@@ -173,7 +173,8 @@ const Step4 = ({ values, setValues, onSubmit, stepNumber }) => {
           onPress={onSubmit}
           style={s.button}
           textStyle={s.buttonText}
-          title={`Następny krok > 0${stepNumber + 1}`}
+          disabled={errors.length || errors.weight}
+          title={`Następny krok ${stepNumber + 1}`}
         />
       </View>
     </ScrollView>

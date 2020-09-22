@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useMemo } from "react";
 import s from "./Step3.s";
 import { connect } from "react-redux";
 import { Text, View } from "react-native";
@@ -10,12 +10,28 @@ import Button from "../../../misc/Button/Button";
 import { withFormik } from "formik";
 import AdaptiveWrapper from "../../../wrappers/AdaptiveWrapper/AdaptiveWrapper";
 
-const Step3 = ({ values, setValues, onSubmit, stepNumber }) => {
+const Step3 = ({ values, setValues, onSubmit, stepNumber, errors }) => {
+  const {
+    hours: selectedHours,
+    minutes: selectedMinutes,
+  } = values.deliveryTime;
   const onHoursChange = (hours) => {
-    setValues({ ...values, hours });
+    setValues({
+      ...values,
+      deliveryTime: {
+        hours,
+        minutes: selectedMinutes,
+      },
+    });
   };
   const onMinutesChange = (minutes) => {
-    setValues({ ...values, minutes });
+    setValues({
+      ...values,
+      deliveryTime: {
+        hours: selectedHours,
+        minutes,
+      },
+    });
   };
   return (
     <View>
@@ -35,16 +51,17 @@ const Step3 = ({ values, setValues, onSubmit, stepNumber }) => {
         </Text>
         <View style={s.pickersContainer}>
           <ScrollPicker
-            activeItem={values.hours}
+            activeItem={selectedHours}
             setActiveItem={onHoursChange}
             numberOfItems={24}
             title="godz."
           />
           <SvgUri source={require("../../../../assets/icons/dots.svg")} />
           <ScrollPicker
-            activeItem={values.minutes}
+            activeItem={selectedMinutes}
+            itemsStep={5}
             setActiveItem={onMinutesChange}
-            numberOfItems={60}
+            numberOfItems={12}
             title="min."
           />
         </View>
@@ -52,8 +69,9 @@ const Step3 = ({ values, setValues, onSubmit, stepNumber }) => {
       <Button
         onPress={onSubmit}
         style={s.button}
+        disabled={errors.deliveryTime}
         textStyle={s.buttonText}
-        title={`Następny krok > 0${stepNumber + 1}`}
+        title={`Następny krok ${stepNumber + 1}`}
       />
     </View>
   );

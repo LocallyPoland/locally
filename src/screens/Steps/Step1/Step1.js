@@ -1,16 +1,54 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import s from "./Step1.s";
-import { Image, ScrollView, Text, TouchableOpacity, View } from "react-native";
+import { ScrollView, Text, TouchableOpacity, View } from "react-native";
 import SvgUri from "react-native-svg-uri";
 import { widthPercentageToDP as wp } from "react-native-responsive-screen";
 import Button from "../../../misc/Button/Button";
 import Input from "../../../misc/Input/Input";
 import AdaptiveWrapper from "../../../wrappers/AdaptiveWrapper/AdaptiveWrapper";
 import { mwp } from "../../../utils/utils";
+import { connect } from "react-redux";
 
-const Step1 = ({ handleChange, values, onSubmit, stepNumber }) => {
+const Step1 = ({
+  handleChange,
+  values,
+  onSubmit,
+  stepNumber,
+  errors,
+  places,
+  setValues,
+}) => {
+  console.log("places ===", places);
+  const [filteredPlaces, setFilteredPlaces] = useState(places || []);
+
+  const onPlaceSelect = (place) => {
+    const { deliveryApartament, deliveryHouse, deliveryStreet } = place;
+    setValues({
+      ...values,
+      pickUp: `ul. ${deliveryStreet} ${deliveryHouse} ${
+        !!deliveryApartament && "/"
+      } ${deliveryApartament}`,
+    });
+  };
+
+  const filterPlaces = (text) => {
+    setFilteredPlaces(
+      places.filter((place) => {
+        const { deliveryApartament, deliveryHouse, deliveryStreet } = place;
+        return (
+          deliveryApartament?.includes(text) ||
+          deliveryHouse.includes(text) ||
+          deliveryStreet.includes(text)
+        );
+      })
+    );
+  };
+
+  useEffect(() => {
+    filterPlaces(values.pickUp);
+  }, [values.pickUp]);
   return (
-    <View>
+    <ScrollView>
       <View style={s.inner}>
         <View style={s.imageContainer}>
           <AdaptiveWrapper minWidthToShow={350}>
@@ -44,27 +82,52 @@ const Step1 = ({ handleChange, values, onSubmit, stepNumber }) => {
           </View>
         </Input>
         <ScrollView style={s.autocompleteContainer}>
-          {[...Array(50)].map((_, i) => (
-            <TouchableOpacity key={i} style={s.autocompleteItem}>
-              <SvgUri
-                width={wp(7)}
-                height={wp(13)}
-                source={require("../../../../assets/icons/Subtract.svg")}
-              />
-              <Text style={s.autocompleteItemText}>ul. Rynek 5</Text>
-              <Text style={s.autocompleteItemTextSecondary}>Głusk</Text>
-            </TouchableOpacity>
-          ))}
+          {/*[{"__v": 0, "_id": "5f68b1e54bb01800171d959e", "createdAt": "2020-09-21T14:00:05.334Z", "deliveryApartament": "8", "deliveryCity": "Rzeszow", "deliveryHouse": "52", "deliveryStreet": "Rynek", "updatedAt": "2020-09-21T14:00:05.334Z"}]*/}
+          {filteredPlaces.map((place) => {
+            const {
+              id,
+              deliveryApartament,
+              deliveryCity,
+              deliveryHouse,
+              deliveryStreet,
+            } = place;
+            return (
+              <TouchableOpacity
+                key={id}
+                style={s.autocompleteItem}
+                onPress={() => onPlaceSelect(place)}
+              >
+                <SvgUri
+                  width={wp(7)}
+                  height={wp(13)}
+                  source={require("../../../../assets/icons/Subtract.svg")}
+                />
+                <Text style={s.autocompleteItemText}>
+                  ul. {deliveryStreet} {deliveryHouse}
+                  {!!deliveryApartament && " / "}
+                  {deliveryApartament}
+                </Text>
+                <Text style={s.autocompleteItemTextSecondary}>
+                  {deliveryCity}
+                </Text>
+              </TouchableOpacity>
+            );
+          })}
         </ScrollView>
       </View>
       <Button
         onPress={onSubmit}
         style={s.button}
+        disabled={errors.pickUp}
         textStyle={s.buttonText}
-        title={`Następny krok > 0${stepNumber + 1}`}
+        title={`Następny krok ${stepNumber + 1}`}
       />
-    </View>
+    </ScrollView>
   );
 };
 
-export default Step1;
+const mapStateToProps = (state) => ({
+  places: state.places.all,
+});
+
+export default connect(mapStateToProps, null)(Step1);
