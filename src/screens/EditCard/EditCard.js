@@ -12,6 +12,7 @@ import Input from "../../misc/Input/Input";
 import Button from "../../misc/Button/Button";
 import { editCardAction } from "../../store/actions/cardsActions";
 import uuid from "react-uuid";
+import CustomImage from "../../misc/CustomImage/CustomImage";
 
 const EditCard = ({
   navigation,
@@ -26,11 +27,11 @@ const EditCard = ({
     <MainWrapper style={s.container} onBackPress={navigation.goBack}>
       <ScrollView>
         <Text style={s.title}>Zmienić karte</Text>
-        <SvgUri
+        <CustomImage
           style={s.plus}
           width={wp(20)}
           height={wp(20)}
-          source={require("../../../assets/plus.svg")}
+          source={require("../../../assets/icons/plus.png")}
         />
         <OuterShadowWrapper height={wp(75)} width={wp(90)} style={s.shadow}>
           <View style={s.infoContainer}>

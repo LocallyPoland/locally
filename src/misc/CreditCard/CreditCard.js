@@ -16,6 +16,7 @@ import {
 } from "react-native-responsive-screen";
 import OuterShadowWrapper from "../../wrappers/OuterShadowWrapper/OuterShadowWrapper";
 import classnames from "classnames-react-native";
+import CustomImage from "../CustomImage/CustomImage";
 
 const CreditCard = ({
   card = {},
@@ -71,7 +72,7 @@ const CreditCard = ({
           //   style={s.iconContainer}
         >
           <View style={s.iconContainer}>
-            <SvgUri
+            <CustomImage
               width={wp(17)}
               height={wp(14)}
               source={require("../../../assets/icons/check.svg")}

@@ -15,6 +15,7 @@ import SvgUri from "react-native-svg-uri";
 import InnerShadowWrapper from "../../../wrappers/InnerShadowWrapper/InnerShadowWrapper";
 import classnames from "classnames-react-native";
 import { appColors } from "../../../styles/styles";
+import CustomImage from "../../../misc/CustomImage/CustomImage";
 
 const Step4 = ({ values, setValues, onSubmit, stepNumber, errors }) => {
   const setMailType = () => {
@@ -59,9 +60,9 @@ const Step4 = ({ values, setValues, onSubmit, stepNumber, errors }) => {
                     )}
                   >
                     <View style={s.typeSwitchInner}>
-                      <SvgUri
+                      <CustomImage
                         style={s.switchButtonIcon}
-                        source={require("../../../../assets/icons/box.svg")}
+                        source={require("../../../../assets/icons/box.png")}
                         width={wp(8)}
                         height={wp(8)}
                       />
@@ -75,10 +76,10 @@ const Step4 = ({ values, setValues, onSubmit, stepNumber, errors }) => {
                     style={{ ...s.typeSwitchButton, alignSelf: "center" }}
                   >
                     <View style={s.typeSwitchInner}>
-                      <SvgUri
+                      <CustomImage
                         fill={appColors.darkBlue}
                         style={s.switchButtonIcon}
-                        source={require("../../../../assets/icons/mail.svg")}
+                        source={require("../../../../assets/icons/mail.png")}
                         width={wp(8)}
                         height={wp(8)}
                       />
@@ -97,10 +98,10 @@ const Step4 = ({ values, setValues, onSubmit, stepNumber, errors }) => {
                     style={s.typeSwitchButton}
                   >
                     <View style={s.typeSwitchInner}>
-                      <SvgUri
+                      <CustomImage
                         style={s.switchButtonIcon}
                         fill={appColors.darkBlue}
-                        source={require("../../../../assets/icons/box.svg")}
+                        source={require("../../../../assets/icons/box.png")}
                         width={wp(8)}
                         height={wp(8)}
                       />
@@ -117,10 +118,10 @@ const Step4 = ({ values, setValues, onSubmit, stepNumber, errors }) => {
                     )}
                   >
                     <View style={s.typeSwitchInner}>
-                      <SvgUri
+                      <CustomImage
                         fill={appColors.purple}
                         style={s.switchButtonIcon}
-                        source={require("../../../../assets/icons/mail.svg")}
+                        source={require("../../../../assets/icons/mail.png")}
                         width={wp(8)}
                         height={wp(8)}
                       />

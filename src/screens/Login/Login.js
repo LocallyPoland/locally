@@ -13,6 +13,7 @@ import { loginAction } from "../../store/actions/profileActions";
 import classnames from "classnames-react-native";
 import { mwp } from "../../utils/utils";
 import AdaptiveWrapper from "../../wrappers/AdaptiveWrapper/AdaptiveWrapper";
+import CustomImage from "../../misc/CustomImage/CustomImage";
 
 const Login = ({
   values,
@@ -30,11 +31,10 @@ const Login = ({
   return (
     <MainWrapper style={s.container} onBackPress={navigation.goBack}>
       <Text style={s.title}>Login</Text>
-      <AdaptiveWrapper minWidthToShow={350}>
-        <SvgUri
-          width={wp(40)}
-          height={wp(40)}
-          source={require("../../../assets/login-image.svg")}
+      <AdaptiveWrapper minWidthToShow={330}>
+        <Image
+          style={{ width: wp(40), height: wp(40) }}
+          source={require("../../../assets/login-image.png")}
         />
       </AdaptiveWrapper>
       <View style={s.infoContainer}>
@@ -79,7 +79,9 @@ const Login = ({
           textStyle={s.facebookButtonStyle}
         >
           <View style={s.facebookIconContainer}>
-            <SvgUri source={require("../../../assets/icons/facebook.svg")} />
+            <CustomImage
+              source={require("../../../assets/icons/facebook.png")}
+            />
           </View>
         </Button>
         <View style={s.textContainer}>

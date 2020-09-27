@@ -10,6 +10,7 @@ import Input from "../../../misc/Input/Input";
 import Button from "../../../misc/Button/Button";
 import AdaptiveWrapper from "../../../wrappers/AdaptiveWrapper/AdaptiveWrapper";
 import { mwp } from "../../../utils/utils";
+import CustomImage from "../../../misc/CustomImage/CustomImage";
 
 const Step2 = ({ handleChange, values, onSubmit, stepNumber, errors }) => {
   console.log("values step2 ===", values);
@@ -17,10 +18,10 @@ const Step2 = ({ handleChange, values, onSubmit, stepNumber, errors }) => {
     <View>
       <View style={s.imageContainer}>
         <AdaptiveWrapper minWidthToShow={350}>
-          <SvgUri
+          <CustomImage
             width={mwp(60)}
             height={mwp(50)}
-            source={require("../../../../assets/icons/Group-63.svg")}
+            source={require("../../../../assets/icons/Group-63.png")}
           />
         </AdaptiveWrapper>
       </View>
@@ -39,20 +40,20 @@ const Step2 = ({ handleChange, values, onSubmit, stepNumber, errors }) => {
         placeholder="ul. Rynek 5"
       >
         <View style={s.inputIconContainer}>
-          <SvgUri
-            width={wp(6)}
-            height={wp(13)}
-            source={require("../../../../assets/icons/Group-82.svg")}
+          <CustomImage
+            width={wp(4)}
+            height={wp(10)}
+            source={require("../../../../assets/icons/Group-82.png")}
           />
         </View>
       </Input>
       <ScrollView style={s.autocompleteContainer}>
         {[...Array(50)].map((_, i) => (
           <TouchableOpacity key={i} style={s.autocompleteItem}>
-            <SvgUri
+            <CustomImage
               width={wp(7)}
               height={wp(13)}
-              source={require("../../../../assets/icons/Subtract.svg")}
+              source={require("../../../../assets/icons/Subtract.png")}
             />
             <Text style={s.autocompleteItemText}>ul. Rynek 5</Text>
             <Text style={s.autocompleteItemTextSecondary}>Głusk</Text>

@@ -18,6 +18,12 @@ export default StyleSheet.create({
     borderRadius: 25,
     height: mhp(15, 300, 100),
   },
+  cardImage: {
+    width: mwp(9, 50, 30),
+    resizeMode: "contain",
+    height: mwp(9, 50, 30),
+    // objectFit: "cover",
+  },
   cardTitle: {
     color: appColors.darkBlue,
     fontFamily: "PoppinsBold",

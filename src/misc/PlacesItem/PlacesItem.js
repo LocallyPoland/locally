@@ -18,6 +18,7 @@ import Swipeable from "react-native-swipeable";
 import classnames from "classnames-react-native";
 import { deletePlaceAction } from "../../store/actions/placesActions";
 import { connect } from "react-redux";
+import CustomImage from "../CustomImage/CustomImage";
 
 const PlacesItem = ({ deletePlace, place, navigation }) => {
   const { deliveryStreet, deliveryHouse, deliveryApartament, _id } = place;
@@ -64,7 +65,7 @@ const PlacesItem = ({ deletePlace, place, navigation }) => {
           //   style={s.iconContainer}
         >
           <View style={s.iconContainer}>
-            <SvgUri
+            <CustomImage
               width={wp(17)}
               height={wp(14)}
               source={require("../../../assets/icons/check.svg")}

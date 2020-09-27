@@ -5,6 +5,7 @@ import { PersistGate } from "redux-persist/integration/react";
 import Navigation from "./src/navigation/Navigation";
 
 const App = () => {
+  console.log("here");
   return (
     <Provider store={store}>
       <PersistGate loading={null} persistor={persistor}>

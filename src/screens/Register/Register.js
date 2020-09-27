@@ -8,6 +8,7 @@ import Input from "../../misc/Input/Input";
 import Button from "../../misc/Button/Button";
 import { connect } from "react-redux";
 import { registerAction } from "../../store/actions/profileActions";
+import CustomImage from "../../misc/CustomImage/CustomImage";
 
 const Register = ({
   values,
@@ -92,7 +93,9 @@ const Register = ({
             textStyle={s.facebookButtonStyle}
           >
             <View style={s.facebookIconContainer}>
-              <SvgUri source={require("../../../assets/icons/facebook.svg")} />
+              <CustomImage
+                source={require("../../../assets/icons/facebook.svg")}
+              />
             </View>
           </Button>
           <View style={s.registerContainer}>

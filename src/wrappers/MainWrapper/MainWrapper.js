@@ -1,8 +1,6 @@
 import React from "react";
 import s from "./MainWrapper.s";
 import { View, TouchableHighlight, Text, Image } from "react-native";
-import SvgUri from "react-native-svg-uri";
-import { LinearGradient } from "expo-linear-gradient";
 import { BoxShadow } from "react-native-shadow";
 
 const shadowOpt = {
@@ -33,10 +31,10 @@ const MainWrapper = ({
         >
           <BoxShadow setting={shadowOpt}>
             <View style={s.backButtonInner}>
-              <SvgUri
+              <Image
                 width={24}
                 height={24}
-                source={require("../../../assets/icons/icon-back.svg")}
+                source={require("../../../assets/icons/icon-back.png")}
               />
             </View>
           </BoxShadow>

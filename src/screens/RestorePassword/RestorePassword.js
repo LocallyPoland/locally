@@ -10,6 +10,7 @@ import Input from "../../misc/Input/Input";
 import classnames from "classnames-react-native";
 import Button from "../../misc/Button/Button";
 import { restorePasswordAction } from "../../store/actions/profileActions";
+import CustomImage from "../../misc/CustomImage/CustomImage";
 
 const RestorePassword = ({
   values,
@@ -24,10 +25,10 @@ const RestorePassword = ({
   return (
     <MainWrapper title="Przywrócenie hasła" onBackPress={navigation.goBack}>
       <View style={s.imageContainer}>
-        <SvgUri
+        <CustomImage
           width={wp(60)}
           height={wp(60)}
-          source={require("../../../assets/login-image.svg")}
+          source={require("../../../assets/login-image.png")}
         />
       </View>
       <View style={s.infoContainer}>

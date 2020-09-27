@@ -12,6 +12,7 @@ import {
 import AddItemView from "../../misc/AddItemView/AddItemView";
 import { getPlacesAction } from "../../store/actions/placesActions";
 import AdaptiveWrapper from "../../wrappers/AdaptiveWrapper/AdaptiveWrapper";
+import CustomImage from "../../misc/CustomImage/CustomImage";
 
 const Places = ({ navigation, places, getPlaces }) => {
   const redirectToCreatePlace = () => navigation.navigate("CreatePlace");
@@ -19,8 +20,8 @@ const Places = ({ navigation, places, getPlaces }) => {
     <MainWrapper title="Moje adresy" onBackPress={navigation.goBack}>
       <AdaptiveWrapper>
         <View style={s.imageContainer}>
-          <SvgUri
-            source={require("../../../assets/icons/Group-83.svg")}
+          <CustomImage
+            source={require("../../../assets/icons/Group-83.png")}
             width={wp(80)}
           />
         </View>

@@ -8,6 +8,7 @@ import Input from "../../../misc/Input/Input";
 import AdaptiveWrapper from "../../../wrappers/AdaptiveWrapper/AdaptiveWrapper";
 import { mwp } from "../../../utils/utils";
 import { connect } from "react-redux";
+import CustomImage from "../../../misc/CustomImage/CustomImage";
 
 const Step1 = ({
   handleChange,
@@ -52,10 +53,10 @@ const Step1 = ({
       <View style={s.inner}>
         <View style={s.imageContainer}>
           <AdaptiveWrapper minWidthToShow={350}>
-            <SvgUri
+            <CustomImage
               width={mwp(60)}
               height={mwp(50)}
-              source={require("../../../../assets/icons/Group-63.svg")}
+              source={require("../../../../assets/icons/Group-63.png")}
             />
           </AdaptiveWrapper>
         </View>
@@ -74,10 +75,10 @@ const Step1 = ({
           placeholder="ul. Rynek 5"
         >
           <View style={s.inputIconContainer}>
-            <SvgUri
-              width={wp(6)}
-              height={wp(13)}
-              source={require("../../../../assets/icons/Group-82.svg")}
+            <CustomImage
+              width={wp(4)}
+              height={wp(10)}
+              source={require("../../../../assets/icons/Group-82.png")}
             />
           </View>
         </Input>
@@ -97,10 +98,10 @@ const Step1 = ({
                 style={s.autocompleteItem}
                 onPress={() => onPlaceSelect(place)}
               >
-                <SvgUri
+                <CustomImage
                   width={wp(7)}
                   height={wp(13)}
-                  source={require("../../../../assets/icons/Subtract.svg")}
+                  source={require("../../../../assets/icons/Subtract.png")}
                 />
                 <Text style={s.autocompleteItemText}>
                   ul. {deliveryStreet} {deliveryHouse}

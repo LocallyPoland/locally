@@ -13,6 +13,7 @@ import OuterShadowWrapper from "../../wrappers/OuterShadowWrapper/OuterShadowWra
 import { addCardAction } from "../../store/actions/cardsActions";
 import uuid from "react-uuid";
 import AdaptiveWrapper from "../../wrappers/AdaptiveWrapper/AdaptiveWrapper";
+import CustomImage from "../../misc/CustomImage/CustomImage";
 
 const AddCard = ({
   values,
@@ -27,11 +28,11 @@ const AddCard = ({
       <ScrollView>
         <Text style={s.title}>Dodaj kartę</Text>
         <AdaptiveWrapper minWidthToShow={350}>
-          <SvgUri
+          <CustomImage
             style={s.plus}
             width={wp(20)}
             height={wp(20)}
-            source={require("../../../assets/plus.svg")}
+            source={require("../../../assets/icons/plus.png")}
           />
         </AdaptiveWrapper>
         <OuterShadowWrapper height={wp(75)} width={wp(90)} style={s.shadow}>

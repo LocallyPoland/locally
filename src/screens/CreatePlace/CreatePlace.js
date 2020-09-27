@@ -15,6 +15,7 @@ import {
 } from "../../store/actions/placesActions";
 import classnames from "classnames-react-native";
 import { showModalAction } from "../../store/actions/baseActions";
+import CustomImage from "../../misc/CustomImage/CustomImage";
 
 const CreatePlace = ({
   handleChange,
@@ -45,11 +46,11 @@ const CreatePlace = ({
           <Text style={s.title}>
             {isEditing ? "Zmienić addres" : "Dodaj addres"}
           </Text>
-          <SvgUri
+          <CustomImage
             style={s.plus}
             width={wp(20)}
             height={wp(20)}
-            source={require("../../../assets/plus.svg")}
+            source={require("../../../assets/icons/plus.png")}
           />
           <OuterShadowWrapper height={wp(60)} width={wp(90)} style={s.shadow}>
             <View style={s.infoContainer}>

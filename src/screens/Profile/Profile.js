@@ -1,6 +1,6 @@
 import React from "react";
 import s from "./Profile.s";
-import { View, Text } from "react-native";
+import { View, Text, Image } from "react-native";
 import { withFormik } from "formik";
 import { connect } from "react-redux";
 import MainWrapper from "../../wrappers/MainWrapper/MainWrapper";
@@ -48,10 +48,9 @@ const Profile = ({
         />
         <Text style={s.title}>Moje dane</Text>
         <AdaptiveWrapper>
-          <SvgUri
-            width={wp(70)}
-            height={wp(50)}
+          <Image
             source={require("../../../assets/profile-image.svg")}
+            style={{ width: wp(70), height: wp(50) }}
           />
         </AdaptiveWrapper>
         <View style={s.infoContainer}>

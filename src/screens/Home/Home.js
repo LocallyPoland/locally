@@ -13,6 +13,7 @@ import {
 import CardHome from "../../misc/CardHome/CardHome";
 import { mwp } from "../../utils/utils";
 import AdaptiveWrapper from "../../wrappers/AdaptiveWrapper/AdaptiveWrapper";
+import CustomImage from "../../misc/CustomImage/CustomImage";
 
 const Home = ({ user, navigation }) => {
   const [selectedTab, setSelectedTab] = useState(1);
@@ -39,10 +40,10 @@ const Home = ({ user, navigation }) => {
           ) : (
             <View style={s.imageContainer}>
               <AdaptiveWrapper minWidthToShow={350}>
-                <SvgUri
-                  width={mwp(55, 300, 100)}
-                  height={mwp(55, 300, 100)}
-                  source={require("../../../assets/icons/Group-62.svg")}
+                <CustomImage
+                  width={mwp(50, 300, 100)}
+                  height={mwp(50, 300, 100)}
+                  source={require("../../../assets/icons/Group-62.png")}
                 />
               </AdaptiveWrapper>
             </View>
@@ -53,14 +54,14 @@ const Home = ({ user, navigation }) => {
             <Text style={s.selectActionMessage}>Wybierz{"\n"}usługę</Text>
             <View style={s.cardsContainer}>
               <CardHome
-                icon={require("../../../assets/icons/Group-2.svg")}
+                icon={require("../../../assets/icons/Group-2.png")}
                 text="Dostawa jak najszybciej"
                 redirect={() =>
                   navigation.navigate("CreateOrder", { isImmediateOrder: true })
                 }
               />
               <CardHome
-                icon={require("../../../assets/icons/Group-3.svg")}
+                icon={require("../../../assets/icons/Group-3.png")}
                 text="Dostawa na określoną godzinę"
                 redirect={() => navigation.navigate("CreateOrder")}
               />
@@ -71,25 +72,25 @@ const Home = ({ user, navigation }) => {
             <Text style={s.selectActionMessage}>Wybierz{"\n"}usługę</Text>
             <View style={s.cardsContainer}>
               <CardHome
-                icon={require("../../../assets/icons/Group-5.svg")}
+                icon={require("../../../assets/icons/Group-5.png")}
                 text={`Moje\ndane`}
                 redirect={() => navigation.navigate("Profile")}
               />
 
               <CardHome
-                icon={require("../../../assets/icons/Group-6.svg")}
+                icon={require("../../../assets/icons/Group-6.png")}
                 text={`Historia\nzamowień`}
                 redirect={() => navigation.navigate("History")}
               />
 
               <CardHome
-                icon={require("../../../assets/icons/Group-4.svg")}
+                icon={require("../../../assets/icons/Group-4.png")}
                 text={`Moje\nadresy`}
                 redirect={() => navigation.navigate("Places")}
               />
 
               <CardHome
-                icon={require("../../../assets/icons/Group-7.svg")}
+                icon={require("../../../assets/icons/Group-7.png")}
                 text={`Portfel\n`}
                 redirect={() => navigation.navigate("Cards")}
               />

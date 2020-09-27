@@ -1,6 +1,12 @@
 import React from "react";
 import s from "./AddItemView.s";
-import { Text, TouchableHighlight, TouchableOpacity, View } from "react-native";
+import {
+  Text,
+  TouchableHighlight,
+  TouchableOpacity,
+  View,
+  Image,
+} from "react-native";
 import OuterShadowWrapper from "../../wrappers/OuterShadowWrapper/OuterShadowWrapper";
 import { widthPercentageToDP as wp } from "react-native-responsive-screen";
 import SvgUri from "react-native-svg-uri";
@@ -20,10 +26,8 @@ const AddItemView = ({ text, onPress = () => {}, style, withoutPlus }) => {
         {!withoutPlus && (
           <OuterShadowWrapper width={wp(23)} height={wp(23)}>
             <View style={s.iconContainer}>
-              <SvgUri
-                width={wp(23)}
-                height={wp(23)}
-                fill="rgb(255,255,255)"
+              <Image
+                style={{ width: wp(23), height: wp(23) }}
                 source={require("../../../assets/icons/plus.svg")}
               />
             </View>

@@ -9,6 +9,7 @@ import { widthPercentageToDP as wp } from "react-native-responsive-screen";
 import Button from "../../../misc/Button/Button";
 import { withFormik } from "formik";
 import AdaptiveWrapper from "../../../wrappers/AdaptiveWrapper/AdaptiveWrapper";
+import CustomImage from "../../../misc/CustomImage/CustomImage";
 
 const Step3 = ({ values, setValues, onSubmit, stepNumber, errors }) => {
   const {
@@ -38,10 +39,10 @@ const Step3 = ({ values, setValues, onSubmit, stepNumber, errors }) => {
       <View style={s.inner}>
         <AdaptiveWrapper minWidthToShow={350}>
           <View style={s.imageContainer}>
-            <SvgUri
+            <CustomImage
               width={wp(45)}
               height={wp(45)}
-              source={require("../../../../assets/login-image.svg")}
+              source={require("../../../../assets/login-image.png")}
             />
           </View>
         </AdaptiveWrapper>
@@ -56,7 +57,7 @@ const Step3 = ({ values, setValues, onSubmit, stepNumber, errors }) => {
             numberOfItems={24}
             title="godz."
           />
-          <SvgUri source={require("../../../../assets/icons/dots.svg")} />
+          <CustomImage source={require("../../../../assets/icons/dots.png")} />
           <ScrollPicker
             activeItem={selectedMinutes}
             itemsStep={5}
