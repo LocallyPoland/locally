@@ -17,7 +17,7 @@ import Button from "../../misc/Button/Button";
 
 const shadowOpt = {
   width: wp(100),
-  height: hp(18),
+  height: hp(15),
   color: "#b0c3d2",
   border: 50,
   radius: 25,

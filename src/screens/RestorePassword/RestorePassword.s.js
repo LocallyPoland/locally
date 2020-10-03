@@ -1,9 +1,20 @@
 import { StyleSheet } from "react-native";
 import { appColors } from "../../styles/styles";
+import {
+  heightPercentageToDP as hp,
+  widthPercentageToDP as wp,
+} from "react-native-responsive-screen";
+import React from "react";
 
 export default StyleSheet.create({
   imageContainer: {
     alignItems: "center",
+  },
+  image: {
+    width: wp(50),
+    // height: wp(50),
+    height: hp(100) <= 700 ? 120 : wp(40),
+    resizeMode: "contain",
   },
   infoContainer: {
     width: "100%",

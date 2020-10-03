@@ -1,5 +1,8 @@
 import { StyleSheet } from "react-native";
-import { widthPercentageToDP as wp } from "react-native-responsive-screen";
+import {
+  heightPercentageToDP as hp,
+  widthPercentageToDP as wp,
+} from "react-native-responsive-screen";
 import { appColors } from "../../../styles/styles";
 import { mwp } from "../../../utils/utils";
 
@@ -42,7 +45,7 @@ export default StyleSheet.create({
     paddingHorizontal: wp(8),
     paddingVertical: 10,
     marginVertical: 10,
-    height: 100,
+    height: hp(8),
   },
   autocompleteItem: {
     flexDirection: "row",

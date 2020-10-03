@@ -307,6 +307,7 @@ const HistoryItem = ({ item = {}, onlyBaseInfo, containerStyle }) => {
                   style={classnames(
                     s.bold,
                     s.addressValue,
+                    { transform: [{ translateY: 4 }] },
                     [s.textActive, isActive],
                     [s.textNotActive, !isActive]
                   )}

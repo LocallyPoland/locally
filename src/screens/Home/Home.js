@@ -17,6 +17,7 @@ import CustomImage from "../../misc/CustomImage/CustomImage";
 
 const Home = ({ user, navigation }) => {
   const [selectedTab, setSelectedTab] = useState(1);
+  console.log("height ===", hp(100));
   return (
     <MainWrapper style={s.container} onBackPress={navigation.goBack}>
       <View style={s.mainContent}>
@@ -42,7 +43,7 @@ const Home = ({ user, navigation }) => {
               <AdaptiveWrapper minWidthToShow={350}>
                 <CustomImage
                   width={mwp(50, 300, 100)}
-                  height={mwp(50, 300, 100)}
+                  height={hp(100) <= 690 ? 150 : wp(50)}
                   source={require("../../../assets/icons/Group-62.png")}
                 />
               </AdaptiveWrapper>
@@ -51,7 +52,7 @@ const Home = ({ user, navigation }) => {
         </View>
         {selectedTab === 1 ? (
           <View style={s.actionsContainer}>
-            <Text style={s.selectActionMessage}>Wybierz{"\n"}usługę</Text>
+            <Text style={s.selectActionMessage}>Wybierz usługę</Text>
             <View style={s.cardsContainer}>
               <CardHome
                 icon={require("../../../assets/icons/Group-2.png")}
@@ -69,7 +70,7 @@ const Home = ({ user, navigation }) => {
           </View>
         ) : (
           <View style={s.actionsContainer}>
-            <Text style={s.selectActionMessage}>Wybierz{"\n"}usługę</Text>
+            <Text style={s.selectActionMessage}>Wybierz usługę</Text>
             <View style={s.cardsContainer}>
               <CardHome
                 icon={require("../../../assets/icons/Group-5.png")}

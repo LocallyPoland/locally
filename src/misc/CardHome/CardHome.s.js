@@ -27,7 +27,7 @@ export default StyleSheet.create({
   cardTitle: {
     color: appColors.darkBlue,
     fontFamily: "PoppinsBold",
-    fontSize: 12,
+    fontSize: hp(100) <= 690 ? 10 : 12,
     marginTop: 10,
   },
 });

@@ -12,10 +12,8 @@ import AdaptiveWrapper from "../../../wrappers/AdaptiveWrapper/AdaptiveWrapper";
 import CustomImage from "../../../misc/CustomImage/CustomImage";
 
 const Step3 = ({ values, setValues, onSubmit, stepNumber, errors }) => {
-  const {
-    hours: selectedHours,
-    minutes: selectedMinutes,
-  } = values.deliveryTime;
+  const { hours: selectedHours, minutes: selectedMinutes } =
+    values.deliveryTime || {};
   const onHoursChange = (hours) => {
     setValues({
       ...values,
@@ -34,10 +32,15 @@ const Step3 = ({ values, setValues, onSubmit, stepNumber, errors }) => {
       },
     });
   };
+
+  console.log("values ===", values);
+  console.log("selectedMinutes ===", selectedMinutes);
+  console.log("selectedHours ===", selectedHours);
+
   return (
     <View>
       <View style={s.inner}>
-        <AdaptiveWrapper minWidthToShow={350}>
+        <AdaptiveWrapper minWidthToShow={380}>
           <View style={s.imageContainer}>
             <CustomImage
               width={wp(45)}
@@ -54,7 +57,7 @@ const Step3 = ({ values, setValues, onSubmit, stepNumber, errors }) => {
           <ScrollPicker
             activeItem={selectedHours}
             setActiveItem={onHoursChange}
-            numberOfItems={24}
+            numberOfItems={25}
             title="godz."
           />
           <CustomImage source={require("../../../../assets/icons/dots.png")} />
@@ -62,7 +65,7 @@ const Step3 = ({ values, setValues, onSubmit, stepNumber, errors }) => {
             activeItem={selectedMinutes}
             itemsStep={5}
             setActiveItem={onMinutesChange}
-            numberOfItems={12}
+            numberOfItems={13}
             title="min."
           />
         </View>
@@ -72,7 +75,7 @@ const Step3 = ({ values, setValues, onSubmit, stepNumber, errors }) => {
         style={s.button}
         disabled={errors.deliveryTime}
         textStyle={s.buttonText}
-        title={`Następny krok ${stepNumber + 1}`}
+        title={`Następny krok`}
       />
     </View>
   );

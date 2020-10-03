@@ -1,6 +1,12 @@
 import { deletePlace, getPlaces, patchPlace, postPlace } from "../api/api";
 import { store } from "../store";
-import { ADD_PLACE, DELETE_PLACE, EDIT_PLACE, SET_PLACES } from "./actionTypes";
+import {
+  ADD_PLACE,
+  DELETE_PLACE,
+  EDIT_PLACE,
+  EDIT_PLACE_ADDRESS,
+  SET_PLACES,
+} from "./actionTypes";
 
 export const createPlaceAction = (place, onReject) => {
   return async (dispatch) => {
@@ -10,6 +16,7 @@ export const createPlaceAction = (place, onReject) => {
     console.log("token ===", token);
     return postPlace(place, token)
       .then((response) => {
+        console.log("response ===", response?.data);
         dispatch({ type: ADD_PLACE, place: response.data });
         return true;
       })
@@ -42,7 +49,11 @@ export const editPlaceAction = (place, id) => {
     const response = await patchPlace(place, id, token);
     console.log("edit place response ===", response?.data);
     if (response?.status === 200) {
-      dispatch({ type: EDIT_PLACE, place: response?.data });
+      dispatch({
+        type: EDIT_PLACE_ADDRESS,
+        id,
+        address: place.deliveryAddress,
+      });
     }
     return response?.status === 200;
   };

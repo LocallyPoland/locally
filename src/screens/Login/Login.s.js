@@ -8,8 +8,14 @@ import { mhp, mwp } from "../../utils/utils";
 
 export default StyleSheet.create({
   container: {
-    marginTop: hp(9),
+    marginTop: hp(5),
     alignItems: "center",
+    justifyContent: "space-between",
+  },
+  image: {
+    width: wp(40),
+    height: hp(100) <= 700 ? 120 : wp(40),
+    resizeMode: "contain",
   },
   title: {
     fontFamily: "PoppinsBold",
@@ -24,7 +30,7 @@ export default StyleSheet.create({
     borderWidth: 2,
     borderTopLeftRadius: 30,
     borderTopRightRadius: 30,
-    flex: 1,
+    // flex: 1,
   },
   inputContainer: {
     marginBottom: 5,
@@ -36,12 +42,12 @@ export default StyleSheet.create({
     color: appColors.text,
     fontFamily: "PoppinsRegular",
   },
-  facebookButton: {
-    width: "60%",
-    alignSelf: "center",
-    paddingVertical: 10,
-    borderRadius: 25,
-    backgroundColor: appColors.blue,
+  facebookButtonContainer: {
+    paddingVertical: 5,
+    paddingHorizontal: 20,
+    borderRadius: 15,
+    alignItems: "center",
+    backgroundColor: "#157df2",
   },
   facebookButtonStyle: {
     fontSize: 14,

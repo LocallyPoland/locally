@@ -3,7 +3,7 @@ import s from "./Step5.s";
 import StepWrapper from "../../../wrappers/StepWrapper/StepWrapper";
 import { withFormik } from "formik";
 import { connect } from "react-redux";
-import { ScrollView, Text, View } from "react-native";
+import { FlatList, ScrollView, Text, View } from "react-native";
 import HistoryItem from "../../../misc/HistoryItem/HistoryItem";
 import CreditCard from "../../../misc/CreditCard/CreditCard";
 import classnames from "classnames-react-native";
@@ -16,7 +16,7 @@ const Step5 = ({ onSubmit, cards, navigation, values, errors }) => {
       goBack: true,
     });
 
-  const { status, price, weight, length, delivery, pickUp } = values;
+  const { status, sum, weight, length, deliveryAddress, pickUp } = values;
 
   return (
     <ScrollView>
@@ -27,12 +27,12 @@ const Step5 = ({ onSubmit, cards, navigation, values, errors }) => {
             containerStyle={s.infoContainer}
             item={{
               status,
-              price,
+              price: sum,
               maxWeight: weight,
               maxHeight: length,
               address: {
                 from: pickUp,
-                to: delivery,
+                to: deliveryAddress,
               },
             }}
           />
@@ -44,7 +44,11 @@ const Step5 = ({ onSubmit, cards, navigation, values, errors }) => {
             </Text>
           </View>
           <View style={s.cardsContainer}>
-            <ScrollView horizontal contentContainerStyle={s.scrollInner}>
+            <ScrollView
+              showsHorizontalScrollIndicator={false}
+              horizontal
+              contentContainerStyle={s.scrollInner}
+            >
               {cards.map((card, i) => (
                 <CreditCard
                   onlyCardContent
@@ -68,6 +72,7 @@ const Step5 = ({ onSubmit, cards, navigation, values, errors }) => {
         <Button
           onPress={onSubmit}
           style={s.button}
+          disabled={Object.keys(errors).length}
           textStyle={s.buttonText}
           title="Finisz"
         />

@@ -9,6 +9,7 @@ import Button from "../../misc/Button/Button";
 import { connect } from "react-redux";
 import { registerAction } from "../../store/actions/profileActions";
 import CustomImage from "../../misc/CustomImage/CustomImage";
+import { showModalAction } from "../../store/actions/baseActions";
 
 const Register = ({
   values,
@@ -33,7 +34,7 @@ const Register = ({
         <View style={s.infoContainer}>
           <View style={s.inputsRow}>
             <Input
-              placeholder="Jimmy"
+              placeholder="Jan"
               onChangeText={handleChange("fName")}
               value={values.fName}
               onBlur={handleBlur("fName")}
@@ -42,7 +43,7 @@ const Register = ({
               label="Imie"
             />
             <Input
-              placeholder="Carr"
+              placeholder="Kowalski"
               onChangeText={handleChange("lName")}
               value={values.lName}
               onBlur={handleBlur("lName")}
@@ -62,7 +63,7 @@ const Register = ({
             label="Telefon"
           />
           <Input
-            placeholder="email"
+            placeholder="jan-kowalski@gmail.com"
             onChangeText={handleChange("email")}
             value={values.email}
             onBlur={handleBlur("email")}
@@ -81,7 +82,7 @@ const Register = ({
             label="password"
           />
           <Button
-            title="Login"
+            title="Rejestracja"
             onPress={handleSubmit}
             disabled={!!Object.keys(errors).length}
             style={s.buttonContainer}
@@ -94,7 +95,9 @@ const Register = ({
           >
             <View style={s.facebookIconContainer}>
               <CustomImage
-                source={require("../../../assets/icons/facebook.svg")}
+                width={15}
+                height={15}
+                source={require("../../../assets/icons/facebook.png")}
               />
             </View>
           </Button>
@@ -143,7 +146,9 @@ const formikHoc = withFormik({
     values,
     { props: { register, navigation, showModal }, resetForm }
   ) => {
-    const isSuccess = await register(values);
+    let correctPhone = +values.phone.replace(/-/gi, "").replace("+", "") || 0;
+    console.log("values ===", { values, phone: correctPhone });
+    const isSuccess = await register({ ...values, phone: correctPhone });
     console.log("isSuccess ===", isSuccess);
     if (isSuccess) {
       navigation.navigate("Home");
@@ -165,6 +170,7 @@ const formikHoc = withFormik({
 
 const mapDispatchToProps = (dispatch) => ({
   register: (user) => dispatch(registerAction(user)),
+  showModal: (title, desc) => dispatch(showModalAction(title, desc)),
 });
 
 export default connect(null, mapDispatchToProps)(formikHoc);

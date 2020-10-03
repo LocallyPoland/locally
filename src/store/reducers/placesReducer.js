@@ -2,6 +2,7 @@ import {
   ADD_PLACE,
   DELETE_PLACE,
   EDIT_PLACE,
+  EDIT_PLACE_ADDRESS,
   SET_PLACES,
 } from "../actions/actionTypes";
 
@@ -20,12 +21,19 @@ export default (state = initialState, action) => {
         ...state,
         all: state.all.filter((place) => place._id !== action.id),
       };
+    case EDIT_PLACE_ADDRESS:
+      return {
+        ...state,
+        all: state.all.map((place) => {
+          return place._id !== action.id
+            ? place
+            : { ...place, deliveryAddress: action.address };
+        }),
+      };
     case EDIT_PLACE:
       return {
         ...state,
         all: state.all.map((place) => {
-          console.log("place ===", place._id);
-          console.log("action place ===", action.place._id);
           return place._id !== action.place._id ? place : action.place;
         }),
       };

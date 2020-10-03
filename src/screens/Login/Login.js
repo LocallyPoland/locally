@@ -2,17 +2,30 @@ import React from "react";
 import s from "./Login.s";
 import { View, Text, Image, TouchableOpacity } from "react-native";
 import MainWrapper from "../../wrappers/MainWrapper/MainWrapper";
-import SvgUri from "react-native-svg-uri";
 import Input from "../../misc/Input/Input";
 import { withFormik } from "formik";
 import { connect } from "react-redux";
 import Button from "../../misc/Button/Button";
-import { widthPercentageToDP as wp } from "react-native-responsive-screen";
+import {
+  heightPercentageToDP as hp,
+  widthPercentageToDP as wp,
+} from "react-native-responsive-screen";
 import { showModalAction } from "../../store/actions/baseActions";
-import { loginAction } from "../../store/actions/profileActions";
+import {
+  facebookLoginAction,
+  loginAction,
+  registerAction,
+} from "../../store/actions/profileActions";
 import classnames from "classnames-react-native";
-import { mwp } from "../../utils/utils";
 import AdaptiveWrapper from "../../wrappers/AdaptiveWrapper/AdaptiveWrapper";
+// import { , AccessToken } from "react-native-fbsdk";
+import {
+  LoginManager,
+  AccessToken,
+  GraphRequest,
+  GraphRequestManager,
+  LoginButton,
+} from "react-native-fbsdk";
 import CustomImage from "../../misc/CustomImage/CustomImage";
 
 const Login = ({
@@ -21,25 +34,45 @@ const Login = ({
   handleSubmit,
   handleBlur,
   errors,
-  touched,
+  facebookLogin,
   navigation,
   showModal,
 }) => {
   const redirectToRegister = () => navigation.navigate("Register");
   const redirectToRestore = () => navigation.navigate("RestorePassword");
 
+  //Create response callback.
+  const responseInfoCallback = async (error, result) => {
+    if (!error) {
+      const { name, id } = result;
+      const [fName, lName] = name.split(" ");
+      const isSuccess = await facebookLogin({ fName, lName, id });
+      if (isSuccess) {
+        navigation.navigate("Home");
+      } else {
+        showModal("Bląd logowania", "Coś poszło nie tak. Spróbuj ponownie.");
+      }
+    }
+  };
+
+  // Create a graph request asking for user information with a callback to handle the response.
+
+  console.log("wp ===", wp(100));
+
   return (
     <MainWrapper style={s.container} onBackPress={navigation.goBack}>
-      <Text style={s.title}>Login</Text>
-      <AdaptiveWrapper minWidthToShow={330}>
+      <View>
+        <Text style={s.title}>Login</Text>
+        {/*<AdaptiveWrapper minHeightToShow={620}>*/}
         <Image
-          style={{ width: wp(40), height: wp(40) }}
+          style={s.image}
           source={require("../../../assets/login-image.png")}
         />
-      </AdaptiveWrapper>
+        {/*</AdaptiveWrapper>*/}
+      </View>
       <View style={s.infoContainer}>
         <Input
-          placeholder="email"
+          placeholder="jan-kowalski@gmail.com"
           onChangeText={handleChange("email")}
           onBlur={handleBlur("email")}
           value={values.email}
@@ -73,17 +106,30 @@ const Login = ({
           }
         />
         <Text style={s.secondaryText}>albo</Text>
-        <Button
-          title="Facebook"
-          style={s.facebookButton}
-          textStyle={s.facebookButtonStyle}
-        >
-          <View style={s.facebookIconContainer}>
-            <CustomImage
-              source={require("../../../assets/icons/facebook.png")}
-            />
-          </View>
-        </Button>
+        <View style={s.facebookButtonContainer}>
+          <LoginButton
+            onLoginFinished={(error, result) => {
+              if (error) {
+                console.log("login has error: " + result.error);
+              } else if (result.isCancelled) {
+                console.log("login is cancelled.");
+              } else {
+                AccessToken.getCurrentAccessToken().then((data) => {
+                  console.log(data.accessToken.toString());
+                  const infoRequest = new GraphRequest(
+                    "/me",
+                    null,
+                    responseInfoCallback
+                  );
+                  // Start the graph request.
+                  new GraphRequestManager().addRequest(infoRequest).start();
+                });
+              }
+            }}
+            onLogoutFinished={() => console.log("logout.")}
+          />
+        </View>
+        {/*<LoginButton />*/}
         <View style={s.textContainer}>
           <Text>Jeszcze nie masz konta?</Text>
           <TouchableOpacity onPress={redirectToRegister}>
@@ -119,10 +165,7 @@ const formikHOC = withFormik({
     if (isSuccess) {
       navigation.navigate("Home");
     } else {
-      showModal(
-        "Bląd logowania",
-        "Takiego konta nie istnieje spróbuj zalogować się ponownie"
-      );
+      showModal("Bląd logowania", "Coś poszło nie tak. Spróbuj ponownie.");
     }
   },
 })(Login);
@@ -133,6 +176,7 @@ const mapStateToProps = (state) => ({
 const mapDispatchToProps = (dispatch) => ({
   showModal: (title, desc) => dispatch(showModalAction(title, desc)),
   login: (user) => dispatch(loginAction(user)),
+  facebookLogin: (user) => dispatch(facebookLoginAction(user)),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(formikHOC);

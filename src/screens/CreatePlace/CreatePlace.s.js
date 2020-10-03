@@ -27,7 +27,7 @@ export default StyleSheet.create({
     borderColor: "#fff",
     borderWidth: 2,
     width: wp(90),
-    height: wp(60),
+    height: wp(32),
     justifyContent: "center",
     paddingVertical: 30,
     borderTopLeftRadius: 20,

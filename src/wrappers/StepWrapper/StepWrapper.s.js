@@ -11,7 +11,7 @@ export default StyleSheet.create({
     paddingVertical: 15,
     flexDirection: "row",
     paddingHorizontal: wp(8),
-    height: hp(18),
+    height: hp(15),
     alignItems: "flex-end",
     borderBottomRightRadius: 25,
     borderBottomLeftRadius: 25,
@@ -59,9 +59,9 @@ export default StyleSheet.create({
   },
   titleContainer: {
     flexDirection: "row",
-    paddingTop: 30,
+    paddingTop: 10,
     alignItems: "center",
-    marginTop: hp(17),
+    marginTop: hp(15),
   },
   titleStepNumber: {
     fontSize: wp(100) < 350 ? 80 : 92,

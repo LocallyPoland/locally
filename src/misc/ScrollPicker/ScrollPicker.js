@@ -25,14 +25,27 @@ const ScrollPicker = ({
   const onScroll = ({ nativeEvent }) => {
     const { y } = nativeEvent.contentOffset;
     const { height: layoutHeight } = nativeEvent.layoutMeasurement;
+    console.log("step ===", itemsStep);
+    console.log("y ===", y);
+    if (y === 0) {
+      setActiveItem(0);
+      return;
+    }
     const value =
       Math.floor(y / itemHeight) + Math.floor(layoutHeight / itemHeight / 2);
     setActiveItem(value * itemsStep);
+    console.log("active ===", value);
+    console.log("hgsdjhfjkd g=== ", y, itemHeight);
   };
 
   const onMomentumScrollEnd = ({ nativeEvent }) => {
-    scrollRef.current.scrollToIndex({ index: activeItem / itemsStep - 1 });
+    // scrollRef.current.scrollToIndex({
+    //   index: activeItem !== 0 ? activeItem / itemsStep - 1 : 0,
+    // });
   };
+
+  console.log("active ===", activeItem);
+  console.log("step ===", itemsStep);
 
   return (
     <View>
@@ -43,7 +56,11 @@ const ScrollPicker = ({
           {...{ onScroll }}
           {...{ data }}
           {...{ onMomentumScrollEnd }}
-          initialScrollIndex={activeItem - 2}
+          initialScrollIndex={
+            Math.round(activeItem / itemsStep) !== 0
+              ? Math.round(activeItem / itemsStep) - 1
+              : 0
+          }
           getItemLayout={(data, index) => ({
             length: itemHeight,
             offset: itemHeight * index,
@@ -52,42 +69,47 @@ const ScrollPicker = ({
           showsVerticalScrollIndicator={false}
           //   stickyHeaderIndices={[0]}
           style={s.list}
-          renderItem={({ item, onPress = () => {}, style }) => (
-            <TouchableOpacity
-              onLayout={({ nativeEvent }) => {
-                if (!itemHeight) {
-                  setItemHeight(nativeEvent.layout.height);
-                }
-              }}
-              style={classnames(s.item, [
-                s.activeItem,
-                `${activeItem}` === item.title,
-              ])}
-              onPress={onPress}
-            >
-              <Text
-                style={classnames(s.text, [
-                  s.activeText,
-                  `${activeItem}` === item.title,
-                ])}
+          renderItem={(el) => {
+            const { item, onPress = () => {}, index } = el;
+            return (
+              <TouchableOpacity
+                onLayout={({ nativeEvent }) => {
+                  if (!itemHeight) {
+                    setItemHeight(nativeEvent.layout.height);
+                  }
+                }}
+                style={classnames(
+                  s.item,
+                  [s.activeItem, `${activeItem}` === item.title],
+                  [s.firstItem, index === 0],
+                  [s.lastItem, index === numberOfItems - 1]
+                )}
+                onPress={onPress}
               >
-                {item.title}
-              </Text>
-              <View style={s.lines}>
-                <View style={s.line} />
-                <View
-                  style={classnames(s.line, s.mainLine, [
-                    s.activeLine,
+                <Text
+                  style={classnames(s.text, [
+                    s.activeText,
                     `${activeItem}` === item.title,
                   ])}
-                />
-                <View style={s.line} />
-                <View style={s.line} />
-                <View style={s.line} />
-                <View style={s.line} />
-              </View>
-            </TouchableOpacity>
-          )}
+                >
+                  {item.title}
+                </Text>
+                <View style={s.lines}>
+                  <View style={s.line} />
+                  <View
+                    style={classnames(s.line, s.mainLine, [
+                      s.activeLine,
+                      `${activeItem}` === item.title,
+                    ])}
+                  />
+                  <View style={s.line} />
+                  <View style={s.line} />
+                  <View style={s.line} />
+                  <View style={s.line} />
+                </View>
+              </TouchableOpacity>
+            );
+          }}
           keyExtractor={(item) => item.id}
         />
       </InnerShadowWrapper>

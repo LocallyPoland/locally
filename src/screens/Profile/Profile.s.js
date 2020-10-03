@@ -11,9 +11,14 @@ export default StyleSheet.create({
     marginBottom: 5,
   },
   container: {
-    marginTop: hp(12),
+    marginTop: hp(7),
     alignItems: "center",
     minHeight: hp(100),
+  },
+  image: {
+    width: wp(70),
+    height: hp(100) < 700 ? 150 : wp(47),
+    resizeMode: "contain",
   },
   title: {
     fontFamily: "PoppinsBold",
@@ -40,7 +45,7 @@ export default StyleSheet.create({
     paddingHorizontal: 20,
     paddingVertical: 4,
     backgroundColor: `${appColors.red}00`,
-    top: -35,
+    top: -10,
     right: 15,
   },
   logoutButtonText: {

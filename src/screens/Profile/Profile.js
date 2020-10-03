@@ -5,7 +5,6 @@ import { withFormik } from "formik";
 import { connect } from "react-redux";
 import MainWrapper from "../../wrappers/MainWrapper/MainWrapper";
 import { widthPercentageToDP as wp } from "react-native-responsive-screen";
-import SvgUri from "react-native-svg-uri";
 import Input from "../../misc/Input/Input";
 import Button from "../../misc/Button/Button";
 import { ScrollView } from "react-native-gesture-handler";
@@ -47,10 +46,10 @@ const Profile = ({
           textStyle={s.logoutButtonText}
         />
         <Text style={s.title}>Moje dane</Text>
-        <AdaptiveWrapper>
+        <AdaptiveWrapper minHeightToShow={500}>
           <Image
-            source={require("../../../assets/profile-image.svg")}
-            style={{ width: wp(70), height: wp(50) }}
+            source={require("../../../assets/icons/profile-image.png")}
+            style={s.image}
           />
         </AdaptiveWrapper>
         <View style={s.infoContainer}>
@@ -87,7 +86,7 @@ const Profile = ({
             keyboardType="numeric"
           />
           <Input
-            placeholder="filthycomedy"
+            placeholder="********"
             containerStyle={s.inputContainer}
             label="Hasło"
             onChangeText={handleChange("password")}
@@ -114,7 +113,7 @@ const formikHOC = withFormik({
       lName,
       email,
       phone: `${phone}`,
-      password,
+      password: "",
     };
   },
   validationSchema: yup.object().shape({

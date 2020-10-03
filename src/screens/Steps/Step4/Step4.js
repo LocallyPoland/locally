@@ -31,7 +31,10 @@ const Step4 = ({ values, setValues, onSubmit, stepNumber, errors }) => {
     });
   };
 
+  console.log("values step4 ===", values);
+
   const setActiveWeightItem = (weight) => {
+    console.log("here weight");
     setValues({ ...values, weight });
   };
   const setActiveLengthItem = (length) => {
@@ -53,7 +56,7 @@ const Step4 = ({ values, setValues, onSubmit, stepNumber, errors }) => {
               <View style={s.typeSwitchButtons}>
                 <OuterShadowWrapper height={wp(20)} width={wp(35)}>
                   <TouchableOpacity
-                    onPress={setBoxType}
+                    // onPress={setBoxType}
                     style={classnames(
                       s.typeSwitchButton,
                       s.typeSwitchButtonActive
@@ -111,7 +114,7 @@ const Step4 = ({ values, setValues, onSubmit, stepNumber, errors }) => {
                 </InnerShadowWrapper>
                 <OuterShadowWrapper height={wp(20)} width={wp(35)}>
                   <TouchableOpacity
-                    onPressIn={setBoxType}
+                    // onPress={setBoxType}
                     style={classnames(
                       s.typeSwitchButton,
                       s.typeSwitchButtonActive
@@ -175,21 +178,14 @@ const Step4 = ({ values, setValues, onSubmit, stepNumber, errors }) => {
           style={s.button}
           textStyle={s.buttonText}
           disabled={errors.length || errors.weight}
-          title={`Następny krok ${stepNumber + 1}`}
+          title={`Następny krok`}
         />
       </View>
     </ScrollView>
   );
 };
 
-const formikHOC = withFormik({
-  mapPropsToValues: () => ({
-    weight: 1,
-    dimensions: 25,
-  }),
-})(Step4);
-
 const mapStateToProps = (state) => ({});
 const mapDispatchToProps = (dispatch) => ({});
 
-export default connect(mapStateToProps, mapDispatchToProps)(formikHOC);
+export default connect(mapStateToProps, mapDispatchToProps)(Step4);

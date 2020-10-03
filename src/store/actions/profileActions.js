@@ -1,4 +1,9 @@
-import { loginRequest, patchUser, registerRequest } from "../api/api";
+import {
+  facebookLoginRequest,
+  loginRequest,
+  patchUser,
+  registerRequest,
+} from "../api/api";
 import { ADD_CARD, CLEAR_USER, SET_USER } from "./actionTypes";
 
 export const registerAction = (user) => {
@@ -23,6 +28,19 @@ export const loginAction = (data) => {
       dispatch({ type: SET_USER, user: {} });
     }
     return response.status === 200;
+  };
+};
+
+export const facebookLoginAction = (user) => {
+  return async (dispatch) => {
+    return facebookLoginRequest(user)
+      .then((res) => {
+        const { user, token } = response.data;
+        console.log("user ===", response.data.user);
+        dispatch({ type: SET_USER, user: { ...user, token } });
+        return true;
+      })
+      .catch((e) => false);
   };
 };
 

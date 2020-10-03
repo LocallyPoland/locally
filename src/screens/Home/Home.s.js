@@ -7,7 +7,7 @@ import { appColors } from "../../styles/styles";
 
 export default StyleSheet.create({
   container: {
-    marginTop: hp(8),
+    marginTop: hp(4),
   },
   userInfoContainer: {
     alignSelf: "flex-end",
@@ -50,6 +50,7 @@ export default StyleSheet.create({
     textAlign: "left",
     fontFamily: "PoppinsSemiBold",
     marginLeft: 15,
+    width: 150,
     color: appColors.darkBlue,
   },
   cardsContainer: {

@@ -11,6 +11,7 @@ export default StyleSheet.create({
     marginBottom: 50,
     justifyContent: "center",
     alignItems: "center",
+    position: "relative",
   },
   inner: {
     padding: 15,
@@ -64,17 +65,20 @@ export default StyleSheet.create({
     alignItems: "center",
   },
   addressColumn: {
-    height: 50,
+    marginTop: 4,
+    height: 45,
     justifyContent: "space-between",
     position: "relative",
   },
   image: {
-    height: "100%",
-    width: 12,
+    height: 41,
+    width: 14,
+    resizeMode: "contain",
   },
   imageContainer: {
     justifyContent: "center",
     marginHorizontal: 8,
+    // height: "100%",
   },
   floatRight: {
     textAlign: "right",

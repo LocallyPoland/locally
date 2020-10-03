@@ -39,7 +39,7 @@ const AddCard = ({
           <View style={s.infoContainer}>
             <Input
               label="Imję i nazwisko"
-              placeholder="Jimmy Carr"
+              placeholder="Jan Kowalski"
               onChangeText={handleChange("fullName")}
               value={values.fullName}
             />

@@ -23,24 +23,18 @@ const Step1 = ({
   const [filteredPlaces, setFilteredPlaces] = useState(places || []);
 
   const onPlaceSelect = (place) => {
-    const { deliveryApartament, deliveryHouse, deliveryStreet } = place;
+    const { deliveryAddress } = place;
     setValues({
       ...values,
-      pickUp: `ul. ${deliveryStreet} ${deliveryHouse} ${
-        !!deliveryApartament && "/"
-      } ${deliveryApartament}`,
+      pickUp: deliveryAddress,
     });
   };
 
   const filterPlaces = (text) => {
     setFilteredPlaces(
       places.filter((place) => {
-        const { deliveryApartament, deliveryHouse, deliveryStreet } = place;
-        return (
-          deliveryApartament?.includes(text) ||
-          deliveryHouse.includes(text) ||
-          deliveryStreet.includes(text)
-        );
+        const { deliveryAddress } = place;
+        return deliveryAddress?.includes(text);
       })
     );
   };
@@ -52,13 +46,13 @@ const Step1 = ({
     <ScrollView>
       <View style={s.inner}>
         <View style={s.imageContainer}>
-          <AdaptiveWrapper minWidthToShow={350}>
-            <CustomImage
-              width={mwp(60)}
-              height={mwp(50)}
-              source={require("../../../../assets/icons/Group-63.png")}
-            />
-          </AdaptiveWrapper>
+          {/*<AdaptiveWrapper minWidthToShow={350}>*/}
+          <CustomImage
+            width={mwp(60)}
+            height={mwp(50)}
+            source={require("../../../../assets/icons/Group-63.png")}
+          />
+          {/*</AdaptiveWrapper>*/}
         </View>
         <View style={s.textContainer}>
           <View style={s.textLine} />
@@ -85,13 +79,7 @@ const Step1 = ({
         <ScrollView style={s.autocompleteContainer}>
           {/*[{"__v": 0, "_id": "5f68b1e54bb01800171d959e", "createdAt": "2020-09-21T14:00:05.334Z", "deliveryApartament": "8", "deliveryCity": "Rzeszow", "deliveryHouse": "52", "deliveryStreet": "Rynek", "updatedAt": "2020-09-21T14:00:05.334Z"}]*/}
           {filteredPlaces.map((place) => {
-            const {
-              id,
-              deliveryApartament,
-              deliveryCity,
-              deliveryHouse,
-              deliveryStreet,
-            } = place;
+            const { id, deliveryAddress } = place;
             return (
               <TouchableOpacity
                 key={id}
@@ -103,14 +91,8 @@ const Step1 = ({
                   height={wp(13)}
                   source={require("../../../../assets/icons/Subtract.png")}
                 />
-                <Text style={s.autocompleteItemText}>
-                  ul. {deliveryStreet} {deliveryHouse}
-                  {!!deliveryApartament && " / "}
-                  {deliveryApartament}
-                </Text>
-                <Text style={s.autocompleteItemTextSecondary}>
-                  {deliveryCity}
-                </Text>
+                <Text style={s.autocompleteItemText}>{deliveryAddress}</Text>
+                <Text style={s.autocompleteItemTextSecondary}>Rzeczow</Text>
               </TouchableOpacity>
             );
           })}
@@ -121,7 +103,7 @@ const Step1 = ({
         style={s.button}
         disabled={errors.pickUp}
         textStyle={s.buttonText}
-        title={`Następny krok ${stepNumber + 1}`}
+        title={`Następny krok`}
       />
     </ScrollView>
   );

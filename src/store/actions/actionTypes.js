@@ -9,3 +9,6 @@ export const SET_PLACES = "SET_PLACES";
 export const ADD_PLACE = "ADD_PLACE";
 export const DELETE_PLACE = "DELETE_PLACE";
 export const EDIT_PLACE = "EDIT_PLACE";
+export const SET_SETTINGS = "SET_SETTINGS";
+export const SET_HISTORY = "SET_HISTORY";
+export const EDIT_PLACE_ADDRESS = "EDIT_PLACE_ADDRESS";

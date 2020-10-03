@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from "react";
+import React, { useCallback, useEffect, useRef } from "react";
 import s from "./CreatePlace.s";
 import { withFormik } from "formik";
 import { connect } from "react-redux";
@@ -16,20 +16,36 @@ import {
 import classnames from "classnames-react-native";
 import { showModalAction } from "../../store/actions/baseActions";
 import CustomImage from "../../misc/CustomImage/CustomImage";
+import { useRoute, useFocusEffect } from "@react-navigation/native";
 
 const CreatePlace = ({
   handleChange,
   handleSubmit,
   values,
+  setValues,
+  places,
   navigation,
-  route: { params },
 }) => {
   const scrollRef = useRef();
-  const isEditing = !!params?.place;
+  const route = useRoute();
+  const isEditing = !!route.params?.placeId;
 
   const onKeyboardDidShow = () => {
     scrollRef.current.scrollToEnd();
   };
+
+  // const
+
+  useFocusEffect(
+    useCallback(() => {
+      // const place = navigation.getParam("place");
+      const { placeId } = route.params || {};
+      if (placeId) {
+        const place = places.find(({ _id }) => placeId === _id);
+        setValues({ deliveryAddress: place.deliveryAddress });
+      }
+    }, [])
+  );
 
   useEffect(() => {
     Keyboard.addListener("keyboardDidShow", onKeyboardDidShow);
@@ -52,33 +68,14 @@ const CreatePlace = ({
             height={wp(20)}
             source={require("../../../assets/icons/plus.png")}
           />
-          <OuterShadowWrapper height={wp(60)} width={wp(90)} style={s.shadow}>
+          <OuterShadowWrapper height={wp(32)} width={wp(90)} style={s.shadow}>
             <View style={s.infoContainer}>
               <Input
-                label="Ulica"
-                placeholder="Rynek"
-                onChangeText={handleChange("deliveryStreet")}
-                value={values.deliveryStreet}
+                label="Addres"
+                placeholder="ul. Rynek 5"
+                onChangeText={handleChange("deliveryAddress")}
+                value={values.deliveryAddress}
               />
-
-              <View style={s.row}>
-                <Input
-                  placeholder="42"
-                  label="Numer budynku"
-                  onChangeText={handleChange("deliveryHouse")}
-                  value={values.deliveryHouse}
-                  containerStyle={s.input}
-                  keyboardType="numeric"
-                />
-                <Input
-                  placeholder="3"
-                  label="Numer mieszkania"
-                  onChangeText={handleChange("deliveryApartament")}
-                  value={values.deliveryApartament}
-                  containerStyle={{ ...s.input, marginLeft: 20 }}
-                  keyboardType="numeric"
-                />
-              </View>
             </View>
           </OuterShadowWrapper>
           <View style={s.button}>
@@ -95,15 +92,9 @@ const CreatePlace = ({
 };
 
 const formikHOC = withFormik({
-  mapPropsToValues: ({ route: { params } }) => {
-    const place = params?.place || {};
-    return {
-      deliveryCity: "Rzeszow",
-      deliveryHouse: place.deliveryHouse || "",
-      deliveryStreet: place.deliveryStreet || "",
-      deliveryApartament: place.deliveryApartament || "",
-    };
-  },
+  mapPropsToValues: ({ route: { params } }) => ({
+    deliveryAddress: "",
+  }),
   handleSubmit: async (
     values,
     {
@@ -118,27 +109,27 @@ const formikHOC = withFormik({
     }
   ) => {
     let isSuccess = false;
-    if (params?.place) {
-      isSuccess = await editPlace(values, params.place._id);
+    const { placeId } = params || {};
+    if (placeId) {
+      console.log("values ===", values);
+      isSuccess = await editPlace(values, placeId);
     } else {
       isSuccess = await createPlace(values, () =>
         showModal("Bląd tworzenia", "Podczas tworzenia wystąpił problem")
       );
     }
     if (isSuccess) {
-      navigation.goBack();
       resetForm({
-        deliveryCity: "Rzeszow",
-        deliveryHouse: "",
-        deliveryStreet: "",
-        deliveryApartament: "",
+        deliveryAddress: "",
       });
-    } else {
+      navigation.goBack();
     }
   },
 })(CreatePlace);
 
-const mapStateToProps = (state) => ({});
+const mapStateToProps = (state) => ({
+  places: state.places.all,
+});
 const mapDispatchToProps = (dispatch) => ({
   createPlace: (place, onReject) =>
     dispatch(createPlaceAction(place, onReject)),

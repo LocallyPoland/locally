@@ -1,18 +1,8 @@
 import React, { useMemo } from "react";
 import s from "./PlacesItem.s";
 import OuterShadowWrapper from "../../wrappers/OuterShadowWrapper/OuterShadowWrapper";
-import {
-  heightPercentageToDP as hp,
-  widthPercentageToDP as wp,
-} from "react-native-responsive-screen";
-import {
-  Image,
-  Text,
-  TouchableHighlight,
-  TouchableOpacity,
-  View,
-} from "react-native";
-import SvgUri from "react-native-svg-uri";
+import { widthPercentageToDP as wp } from "react-native-responsive-screen";
+import { Image, Text, TouchableOpacity, View } from "react-native";
 import InnerShadowWrapper from "../../wrappers/InnerShadowWrapper/InnerShadowWrapper";
 import Swipeable from "react-native-swipeable";
 import classnames from "classnames-react-native";
@@ -21,12 +11,12 @@ import { connect } from "react-redux";
 import CustomImage from "../CustomImage/CustomImage";
 
 const PlacesItem = ({ deletePlace, place, navigation }) => {
-  const { deliveryStreet, deliveryHouse, deliveryApartament, _id } = place;
-
+  const { deliveryAddress, _id } = place;
+  console.log("place item ===", place);
   const deletePlaceHandler = () => deletePlace(_id);
   const editPlaceHandler = () =>
     navigation.navigate("CreatePlace", {
-      place,
+      placeId: _id,
     });
 
   const rightButtons = useMemo(() => {
@@ -68,16 +58,12 @@ const PlacesItem = ({ deletePlace, place, navigation }) => {
             <CustomImage
               width={wp(17)}
               height={wp(14)}
-              source={require("../../../assets/icons/check.svg")}
+              source={require("../../../assets/icons/check.png")}
             />
           </View>
         </OuterShadowWrapper>
         <InnerShadowWrapper style={s.mainContent}>
-          <Text style={s.text}>
-            {`ul. ${deliveryStreet}, ${deliveryHouse} ${
-              deliveryApartament ? "/" : ""
-            } ${deliveryApartament}`}
-          </Text>
+          <Text style={s.text}>{deliveryAddress}</Text>
         </InnerShadowWrapper>
       </View>
     </Swipeable>

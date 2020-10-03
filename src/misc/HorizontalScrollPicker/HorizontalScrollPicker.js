@@ -25,14 +25,21 @@ const HorizontalScrollPicker = ({
   const onScroll = ({ nativeEvent }) => {
     const { x } = nativeEvent.contentOffset;
     const { width: layoutWidth } = nativeEvent.layoutMeasurement;
+    if (x === 0) {
+      setActiveItem(0);
+      return;
+    }
     const value =
-      Math.round(x / itemWidth) + Math.floor(layoutWidth / itemWidth / 2);
+      Math.floor(x / itemWidth) + Math.floor(layoutWidth / itemWidth / 2);
     setActiveItem(value * itemsStep);
   };
 
-  const onMomentumScrollEnd = ({ nativeEvent }) => {
-    scrollRef.current.scrollToIndex({ index: activeItem / itemsStep - 1 });
-  };
+  // const onMomentumScrollEnd = ({ nativeEvent }) => {
+  //   scrollRef.current.scrollToIndex({
+  //     index:
+  //       Math.floor(activeItem / itemsStep) > 0 ? activeItem / itemsStep - 1 : 0,
+  //   });
+  // };
 
   return (
     <View>
@@ -41,10 +48,9 @@ const HorizontalScrollPicker = ({
         <FlatList
           horizontal
           ref={scrollRef}
-          {...{ onMomentumScrollEnd }}
           {...{ onScroll }}
           {...{ data }}
-          initialScrollIndex={activeItem - 2}
+          initialScrollIndex={activeItem - 2 > 0 ? activeItem - 2 : 0}
           getItemLayout={(data, index) => ({
             length: itemWidth,
             offset: itemWidth * index,
@@ -52,17 +58,18 @@ const HorizontalScrollPicker = ({
           })}
           showsHorizontalScrollIndicator={false}
           style={s.list}
-          renderItem={({ item, onPress = () => {}, style }) => (
+          renderItem={({ item, onPress = () => {}, index }) => (
             <TouchableOpacity
               onLayout={({ nativeEvent }) => {
                 if (!itemWidth) {
                   setItemWidth(nativeEvent.layout.width);
                 }
               }}
-              style={classnames(s.item, [
-                s.activeItem,
-                `${activeItem}` === item.title,
-              ])}
+              style={classnames(
+                s.item,
+                [s.activeItem, `${activeItem}` === item.title],
+                [s.firstItem, index === 0]
+              )}
               onPress={onPress}
             >
               <Text

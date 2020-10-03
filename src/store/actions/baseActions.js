@@ -1,5 +1,6 @@
-import { HIDE_MODAL, SHOW_MODAL } from "./actionTypes";
+import { HIDE_MODAL, SET_SETTINGS, SHOW_MODAL } from "./actionTypes";
 import { LayoutAnimation } from "react-native";
+import { fetchSettings } from "../api/api";
 
 export const hideModalAction = () => {
   return {
@@ -25,5 +26,13 @@ export const showModalAction = (
     onClose,
     onResolve,
     onReject,
+  };
+};
+
+export const getSettingsAction = () => {
+  return async (dispatch) => {
+    fetchSettings().then((res) => {
+      dispatch({ type: SET_SETTINGS, settings: res.data });
+    });
   };
 };

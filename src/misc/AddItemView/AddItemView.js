@@ -28,7 +28,7 @@ const AddItemView = ({ text, onPress = () => {}, style, withoutPlus }) => {
             <View style={s.iconContainer}>
               <Image
                 style={{ width: wp(23), height: wp(23) }}
-                source={require("../../../assets/icons/plus.svg")}
+                source={require("../../../assets/icons/plus.png")}
               />
             </View>
           </OuterShadowWrapper>

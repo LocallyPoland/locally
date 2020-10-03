@@ -1,4 +1,4 @@
-import { SHOW_MODAL, HIDE_MODAL } from "../actions/actionTypes";
+import { SHOW_MODAL, HIDE_MODAL, SET_SETTINGS } from "../actions/actionTypes";
 
 const initialState = {
   modal: {
@@ -9,6 +9,7 @@ const initialState = {
     onReject: () => {},
     onResolve: () => {},
   },
+  settings: {},
 };
 
 export default (state = initialState, action) => {
@@ -30,6 +31,12 @@ export default (state = initialState, action) => {
       return {
         ...state,
         modal: { ...state.modal, isVisible: false, title: "", desc: "" },
+      };
+
+    case SET_SETTINGS:
+      return {
+        ...state,
+        settings: action.settings,
       };
 
     default:

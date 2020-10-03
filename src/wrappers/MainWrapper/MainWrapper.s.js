@@ -17,7 +17,7 @@ export default StyleSheet.create({
     height: 50,
     width: 50,
     position: "absolute",
-    top: wp(100) < 350 ? hp(2) : hp(5),
+    top: hp(3),
     left: 15,
     borderRadius: 50,
   },
@@ -35,10 +35,10 @@ export default StyleSheet.create({
     flex: 1,
   },
   title: {
-    fontSize: 28,
+    fontSize: hp(100) < 700 ? 24 : 28,
     fontFamily: "PoppinsBold",
     color: appColors.text,
-    marginTop: hp(13),
+    marginTop: hp(11),
     textAlign: "center",
   },
 });

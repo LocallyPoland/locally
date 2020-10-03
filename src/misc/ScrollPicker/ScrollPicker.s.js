@@ -11,6 +11,9 @@ export default StyleSheet.create({
     paddingVertical: 15,
     paddingHorizontal: 25,
   },
+  firstItem: {
+    marginTop: 30,
+  },
   item: {
     height: 35,
     justifyContent: "space-between",
@@ -36,19 +39,22 @@ export default StyleSheet.create({
   text: {
     fontSize: 17,
     fontFamily: "PoppinsRegular",
-    textAlign: "center"
+    textAlign: "center",
   },
   title: {
     textAlign: "center",
     marginBottom: 3,
     fontFamily: "PoppinsBold",
-    color: appColors.text
+    color: appColors.text,
   },
   activeText: {
     fontSize: 30,
     fontFamily: "PoppinsRegular",
     lineHeight: 35,
     color: appColors.purple,
-    textAlign: "center"
+    textAlign: "center",
+  },
+  lastItem: {
+    marginBottom: 50,
   },
 });

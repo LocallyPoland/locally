@@ -6,4 +6,10 @@ export default StyleSheet.create({
     // paddingHorizontal: 30,
     paddingTop: 10,
   },
+  emptyText: {
+    textAlign: "center",
+    fontSize: 20,
+    // width: "80%",
+    fontWeight: "bold",
+  },
 });

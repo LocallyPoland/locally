@@ -10,12 +10,23 @@ import Step5 from "../Steps/Step5/Step5";
 import StepWrapper from "../../wrappers/StepWrapper/StepWrapper";
 import { immediateStepNames, stepNames } from "../../utils/utils";
 import { createOrderAction } from "../../store/actions/orderActions";
-import * as yup from "yup"; // for everything
+import * as yup from "yup";
+import { showModalAction } from "../../store/actions/baseActions"; // for everything
 
 const CreateOrder = (props) => {
   const [stepNumber, setStepNumber] = useState(1);
-  const { route, navigation, handleSubmit, user, validateForm } = props;
+  const {
+    route,
+    navigation,
+    handleSubmit,
+    user,
+    validateForm,
+    values,
+    errors,
+  } = props;
   const moveToNextStep = () => setStepNumber(stepNumber + 1);
+
+  // console.log("values ===", values);
 
   const isImmediateOrder = route?.params?.isImmediateOrder;
 
@@ -25,6 +36,8 @@ const CreateOrder = (props) => {
     }
     setStepNumber(stepNumber - 1);
   };
+
+  console.log("errors ===", errors);
 
   useEffect(() => {
     validateForm();
@@ -92,35 +105,38 @@ const CreateOrder = (props) => {
 };
 
 const formikHOC = withFormik({
-  mapPropsToValues: ({ user }) => ({
-    // delivery: "",
+  mapPropsToValues: ({ user, settings }) => ({
     pickUp: "",
     paymentType: "cash",
-    userID: user._id,
-    sum: 0,
+    sum: settings.price,
     weight: 0,
-    status: "done",
+    status: "created",
     length: 0,
     parcel: "box",
-    deliveryTime: {
-      hours: 12,
-      minutes: 30,
-    },
-    deliveryCity: "Rzeszow",
-    deliveryStreet: "",
-    deliveryHouse: "",
+    deliveryTime: null,
+    deliveryAddress: "",
   }),
-  handleSubmit: (values, { props: { createOrder, user } }) => {
+  handleSubmit: async (
+    values,
+    { props: { createOrder, user, navigation, showModal } }
+  ) => {
     console.log("order values ===", values);
     console.log("user token ===", user.token);
-    createOrder(values, user.token);
+    const isSuccess = await createOrder(values, user.token);
+    if (isSuccess) {
+      navigation.navigate("Home");
+      showModal(
+        "Zamówienie zostało utworzone.",
+        "Dane zamówienia można przeglądać w historii. Chcesz przejść do historii zamówień.",
+        () => {},
+        () => navigation.navigate("History"),
+        () => {}
+      );
+    }
   },
   validationSchema: yup.object().shape({
     pickUp: yup.string().required(),
-    userID: yup.string().required(),
-    deliveryCity: yup.string().required(),
-    deliveryStreet: yup.string().required(),
-    deliveryHouse: yup.string().required(),
+    deliveryAddress: yup.string().required(),
     weight: yup.number(),
     length: yup.number(),
   }),
@@ -128,9 +144,17 @@ const formikHOC = withFormik({
 
 const mapStateToProps = (state) => ({
   user: state.profile,
+  settings: state.base.settings,
 });
 const mapDispatchToProps = (dispatch) => ({
   createOrder: (order, token) => dispatch(createOrderAction(order, token)),
+  showModal: (
+    title,
+    desc,
+    onClose = () => {},
+    onResolve,
+    onReject = () => {}
+  ) => dispatch(showModalAction(title, desc, onClose, onResolve, onReject)),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(formikHOC);

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { NavigationContainer } from "@react-navigation/native";
 import Home from "../screens/Home/Home";
 import Login from "../screens/Login/Login";
@@ -23,12 +23,17 @@ import RestorePassword from "../screens/RestorePassword/RestorePassword";
 import CreateOrder from "../screens/CreateOrder/CreateOrder";
 import EditCard from "../screens/EditCard/EditCard";
 import CreatePlace from "../screens/CreatePlace/CreatePlace";
+import { getSettingsAction } from "../store/actions/baseActions";
 
 const Stack = createStackNavigator();
 
-const Navigation = ({ profile }) => {
+const Navigation = ({ profile, getSettings }) => {
   const fontState = FontState();
   const isLogged = !!profile._id;
+
+  useEffect(() => {
+    getSettings();
+  }, []);
   return (
     !!fontState.fontsLoaded && (
       <FontContext.Provider value={fontState}>
@@ -115,6 +120,8 @@ const Navigation = ({ profile }) => {
 const mapStateToProps = (state) => ({
   profile: state.profile,
 });
-const mapDispatchToProps = (dispatch) => ({});
+const mapDispatchToProps = (dispatch) => ({
+  getSettings: () => dispatch(getSettingsAction()),
+});
 
 export default connect(mapStateToProps, mapDispatchToProps)(Navigation);
