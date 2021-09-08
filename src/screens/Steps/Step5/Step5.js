@@ -1,83 +1,89 @@
 import React from "react";
 import s from "./Step5.s";
-import StepWrapper from "../../../wrappers/StepWrapper/StepWrapper";
-import { withFormik } from "formik";
 import { connect } from "react-redux";
-import { FlatList, ScrollView, Text, View } from "react-native";
+import { ScrollView, Text, View } from "react-native";
 import HistoryItem from "../../../misc/HistoryItem/HistoryItem";
-import CreditCard from "../../../misc/CreditCard/CreditCard";
-import classnames from "classnames-react-native";
 import Button from "../../../misc/Button/Button";
-import AddItemView from "../../../misc/AddItemView/AddItemView";
+import Input from "../../../misc/Input/Input";
 
-const Step5 = ({ onSubmit, cards, navigation, values, errors }) => {
+const Step5 = ({
+  onSubmit,
+  cards,
+  navigation,
+  values,
+  errors,
+  handleChange,
+  showErrorModal,
+}) => {
   const redirectToAddCard = () =>
     navigation.navigate("AddCard", {
       goBack: true,
     });
 
-  const { status, sum, weight, length, deliveryAddress, pickUp } = values;
+  const {
+    status,
+    sum,
+    weight,
+    length,
+    deliveryAddress,
+    deliveryDate,
+    pickUp,
+    parcel,
+    comments,
+  } = values;
 
   return (
-    <ScrollView>
-      <View style={s.container}>
-        <View style={s.inner}>
-          <HistoryItem
-            onlyBaseInfo
-            containerStyle={s.infoContainer}
-            item={{
-              status,
-              price: sum,
-              maxWeight: weight,
-              maxHeight: length,
-              address: {
-                from: pickUp,
-                to: deliveryAddress,
-              },
-            }}
-          />
-          <View style={{ ...s.textContainer, marginBottom: 10 }}>
-            <View style={s.textLine} />
-            <Text style={s.text}>
-              <Text style={s.textBold}>Naciśnij finisz </Text>i wybierz formę
-              płatności
-            </Text>
+    // <ScrollView>
+    <View style={s.container}>
+      <View style={s.inner}>
+        <ScrollView>
+          <View>
+            <HistoryItem
+              onlyBaseInfo
+              containerStyle={s.infoContainer}
+              item={{
+                status,
+                price: sum,
+                maxWeight: parcel === "box" ? weight : null,
+                maxHeight: parcel === "box" ? length : null,
+                hours: deliveryDate.getHours(),
+                minutes: deliveryDate.getMinutes(),
+                address: {
+                  from: pickUp,
+                  to: deliveryAddress,
+                },
+              }}
+            />
+            <Input
+              containerStyle={s.inputContainer}
+              label="Dodatkowe uwagi"
+              inputStyle={s.input}
+              multiline
+              value={comments}
+              placeholder="pietro II, przesyłkę proszę zostawić pod drzwiami"
+              onChangeText={handleChange("comments")}
+            />
+            <View style={{ ...s.textContainer, marginBottom: 10 }}>
+              <View style={s.textLine} />
+              <Text style={s.text}>
+                Sprawdź szczegóły zamówienia i{" "}
+                <Text style={s.textBold}>Naciśnij zapłać</Text>
+              </Text>
+            </View>
           </View>
-          <View style={s.cardsContainer}>
-            <ScrollView
-              showsHorizontalScrollIndicator={false}
-              horizontal
-              contentContainerStyle={s.scrollInner}
-            >
-              {cards.map((card, i) => (
-                <CreditCard
-                  onlyCardContent
-                  {...{ card }}
-                  key={card.id}
-                  containerStyle={classnames(s.card, [
-                    { marginLeft: 0 },
-                    i === 0,
-                  ])}
-                />
-              ))}
-              <AddItemView
-                style={s.addCard}
-                text="Dodaj karte"
-                withoutPlus
-                onPress={redirectToAddCard}
-              />
-            </ScrollView>
-          </View>
-        </View>
+        </ScrollView>
+      </View>
+      <View style={s.buttonContainer}>
         <Button
           onPress={onSubmit}
           style={s.button}
           disabled={Object.keys(errors).length}
           textStyle={s.buttonText}
-          title="Finisz"
+          title="Zapłać"
         />
       </View>
-    </ScrollView>
+    </View>
+    // </ScrollView>
   );
 };
 

@@ -20,7 +20,7 @@ const Modal = ({
   title,
   desc,
   hideModal,
-  onClose,
+  onClose = () => {},
   onReject,
   onResolve,
 }) => {
@@ -34,12 +34,16 @@ const Modal = ({
   };
 
   const rejectHandler = () => {
-    onReject();
+    if (onReject) {
+      onReject();
+    }
     hideModalHandler();
   };
 
   const resolveHandler = () => {
-    onResolve();
+    if (onResolve) {
+      onResolve();
+    }
     hideModalHandler();
   };
 

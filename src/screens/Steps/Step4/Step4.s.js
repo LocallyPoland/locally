@@ -8,6 +8,7 @@ import { mhp } from "../../../utils/utils";
 export default StyleSheet.create({
   container: {
     flex: 1,
+    paddingHorizontal: 5,
     justifyContent: "space-between",
     marginVertical: mhp(5, 30, 10),
   },
@@ -19,8 +20,8 @@ export default StyleSheet.create({
     marginTop: 10,
   },
   textContainer: {
-    position: "relative",
-    justifyContent: "center",
+    // position: "relative",
+    // justifyContent: "center",
   },
   textLine: {
     position: "absolute",
@@ -34,10 +35,15 @@ export default StyleSheet.create({
     height: wp(9),
   },
   text: {
-    width: wp(65),
-    alignSelf: "center",
     fontFamily: "PoppinsRegular",
     color: appColors.darkBlue,
+    width: "100%",
+  },
+  emptyText: {
+    fontFamily: "PoppinsRegular",
+    color: appColors.darkBlue,
+    width: "100%",
+    fontSize: 17,
   },
   textBold: {
     fontFamily: "PoppinsBold",
@@ -48,20 +54,21 @@ export default StyleSheet.create({
   typeSwitchButtons: {
     flexDirection: "row",
     justifyContent: "space-between",
-    width: "100%",
+    width: "95%",
+    alignSelf: "center",
     alignItems: "center",
   },
   innerShadow: {
     height: wp(20),
-    width: wp(35),
+    width: wp(32),
     borderRadius: 15,
     marginTop: 20,
   },
   typeSwitchButton: {
-    flex: 1,
     borderRadius: 15,
+    flex: 1,
     justifyContent: "center",
-    paddingHorizontal: wp(5),
+    paddingHorizontal: wp(4),
   },
   typeSwitchButtonActive: {
     backgroundColor: appColors.lightPurple,
@@ -72,11 +79,21 @@ export default StyleSheet.create({
     flex: 1,
     justifyContent: "space-between",
   },
+  pickersContainer: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    marginVertical: 20,
+  },
   switchButtonIcon: {
     marginRight: 10,
   },
   switchButtonText: {
     fontFamily: "PoppinsSemiBold",
     color: appColors.text,
+  },
+  weightContainer: {
+    position: "relative",
+    justifyContent: "flex-end",
   },
 });

@@ -4,6 +4,7 @@ import {
   heightPercentageToDP as hp,
   widthPercentageToDP as wp,
 } from "react-native-responsive-screen";
+import { mwp } from "../../../utils/utils";
 
 export default StyleSheet.create({
   container: {
@@ -13,7 +14,6 @@ export default StyleSheet.create({
   },
   inner: {
     overflow: "hidden",
-    flex: 1,
   },
   imageContainer: {
     alignItems: "center",
@@ -31,9 +31,14 @@ export default StyleSheet.create({
     height: 2,
     backgroundColor: "rgba(139, 156, 173, 0.1)",
   },
+  button: {
+    marginBottom: 30,
+  },
   text: {
     width: wp(65),
     alignSelf: "center",
+    fontSize: mwp(3, 20, 10),
+
     fontFamily: "PoppinsRegular",
     color: appColors.darkBlue,
   },
@@ -46,7 +51,7 @@ export default StyleSheet.create({
     paddingHorizontal: wp(8),
     paddingVertical: 10,
     marginVertical: 10,
-    height: hp(10),
+    height: hp(100) < 700 ? hp(8) : hp(14),
   },
   autocompleteItem: {
     flexDirection: "row",
@@ -74,5 +79,6 @@ export default StyleSheet.create({
   },
   weightContainer: {
     marginTop: 40,
+    flexBasis: "30%",
   },
 });

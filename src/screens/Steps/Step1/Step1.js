@@ -19,7 +19,6 @@ const Step1 = ({
   places,
   setValues,
 }) => {
-  console.log("places ===", places);
   const [filteredPlaces, setFilteredPlaces] = useState(places || []);
 
   const onPlaceSelect = (place) => {
@@ -92,7 +91,7 @@ const Step1 = ({
                   source={require("../../../../assets/icons/Subtract.png")}
                 />
                 <Text style={s.autocompleteItemText}>{deliveryAddress}</Text>
-                <Text style={s.autocompleteItemTextSecondary}>Rzeczow</Text>
+                <Text style={s.autocompleteItemTextSecondary}>Rzeszów</Text>
               </TouchableOpacity>
             );
           })}

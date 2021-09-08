@@ -19,7 +19,7 @@ const shadowOpt = {
   y: 0,
 };
 const shadowBottomOpt = {
-  width: 300,
+  width: 700,
   height: 4,
   color: "#fff",
   border: 10,

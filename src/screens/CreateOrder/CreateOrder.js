@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import s from "./CreateOrder.s";
 import { withFormik } from "formik";
 import { connect } from "react-redux";
@@ -8,25 +8,24 @@ import Step3 from "../Steps/Step3/Step3";
 import Step4 from "../Steps/Step4/Step4";
 import Step5 from "../Steps/Step5/Step5";
 import StepWrapper from "../../wrappers/StepWrapper/StepWrapper";
-import { immediateStepNames, stepNames } from "../../utils/utils";
+import {
+  checkAppDisabled,
+  immediateStepNames,
+  stepNames,
+} from "../../utils/utils";
 import { createOrderAction } from "../../store/actions/orderActions";
 import * as yup from "yup";
-import { showModalAction } from "../../store/actions/baseActions"; // for everything
+import {
+  showModalAction,
+  showModalErrorAction,
+} from "../../store/actions/baseActions";
+import { BackHandler } from "react-native-web";
 
 const CreateOrder = (props) => {
   const [stepNumber, setStepNumber] = useState(1);
-  const {
-    route,
-    navigation,
-    handleSubmit,
-    user,
-    validateForm,
-    values,
-    errors,
-  } = props;
+  const { route, navigation, handleSubmit, validateForm } = props;
   const moveToNextStep = () => setStepNumber(stepNumber + 1);
-
-  // console.log("values ===", values);
+  const [stepsHistory, setStepsHistory] = useState([]);
 
   const isImmediateOrder = route?.params?.isImmediateOrder;
 
@@ -37,11 +36,27 @@ const CreateOrder = (props) => {
     setStepNumber(stepNumber - 1);
   };
 
-  console.log("errors ===", errors);
+  const onHardwareBackPress = () => {
+    if (stepNumber - 1) {
+      return setStepNumber((prev) => prev - 1);
+    }
+    navigation.goBack();
+  };
 
   useEffect(() => {
     validateForm();
   }, []);
+
+  useEffect(() => {
+    const backHandler = BackHandler.addEventListener(
+      "hardwareBackPress",
+      onHardwareBackPress
+    );
+    if (!stepsHistory.includes(stepNumber)) {
+      setStepsHistory((prev) => [...prev, stepNumber]);
+    }
+    return () => backHandler.remove();
+  }, [stepNumber]);
 
   return (
     <StepWrapper
@@ -52,6 +67,7 @@ const CreateOrder = (props) => {
       }
       style={s.container}
       numberOfSteps={isImmediateOrder ? 4 : 5}
+      {...{ stepsHistory }}
       {...{ onBackPress }}
       {...{ stepNumber }}
       {...{ setStepNumber }}
@@ -105,32 +121,67 @@ const CreateOrder = (props) => {
 };
 
 const formikHOC = withFormik({
-  mapPropsToValues: ({ user, settings }) => ({
-    pickUp: "",
-    paymentType: "cash",
-    sum: settings.price,
-    weight: 0,
-    status: "created",
-    length: 0,
-    parcel: "box",
-    deliveryTime: null,
-    deliveryAddress: "",
-  }),
+  mapPropsToValues: ({ route, settings }) => {
+    const date = new Date(new Date().getTime() + 3600000);
+    console.log("date ===", date);
+    const isImmediateOrder = route?.params?.isImmediateOrder;
+
+    return {
+      pickUp: "",
+      paymentType: "cash",
+      sum: isImmediateOrder ? settings.priceForCustomer : settings.price,
+      weight: 10,
+      status: "created",
+      length: 10,
+      parcel: "box",
+      deliveryTime: {
+        hours: date.getHours(),
+        minutes: date.getMinutes(),
+      },
+      deliveryDate: date,
+      deliveryAddress: "",
+      comments: "",
+    };
+  },
   handleSubmit: async (
     values,
-    { props: { createOrder, user, navigation, showModal } }
+    {
+      props: {
+        createOrder,
+        user,
+        navigation,
+        showModal,
+        showErrorModal,
+        route,
+      },
+    }
   ) => {
-    console.log("order values ===", values);
-    console.log("user token ===", user.token);
-    const isSuccess = await createOrder(values, user.token);
+    if (checkAppDisabled()) {
+      showErrorModal();
+    }
+    const isImmediateOrder = route?.params?.isImmediateOrder;
+
+    const { deliveryTime, parcel } = values;
+
+    let time = null;
+    if (!isImmediateOrder && deliveryTime) {
+      time = new Date(
+        new Date().setHours(+deliveryTime.hours, +deliveryTime.minutes)
+      ).toUTCString();
+    }
+
+    console.log("user ===", user);
+
+    const isSuccess = await createOrder(
+      { ...values, deliveryTime: time },
+      user.token
+    );
     if (isSuccess) {
       navigation.navigate("Home");
       showModal(
         "Zamówienie zostało utworzone.",
         "Dane zamówienia można przeglądać w historii. Chcesz przejść do historii zamówień.",
-        () => {},
-        () => navigation.navigate("History"),
-        () => {}
+        () => navigation.navigate("History")
       );
     }
   },
@@ -139,6 +190,7 @@ const formikHOC = withFormik({
     deliveryAddress: yup.string().required(),
     weight: yup.number(),
     length: yup.number(),
+    deliveryDate: yup.date().min(new Date(new Date().getTime() + 3500000)),
   }),
 })(CreateOrder);
 
@@ -148,13 +200,9 @@ const mapStateToProps = (state) => ({
 });
 const mapDispatchToProps = (dispatch) => ({
   createOrder: (order, token) => dispatch(createOrderAction(order, token)),
-  showModal: (
-    title,
-    desc,
-    onClose = () => {},
-    onResolve,
-    onReject = () => {}
-  ) => dispatch(showModalAction(title, desc, onClose, onResolve, onReject)),
+  showErrorModal: () => dispatch(showModalErrorAction()),
+  showModal: (title, desc, onClose) =>
+    dispatch(showModalAction(title, desc, onClose, null, null)),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(formikHOC);

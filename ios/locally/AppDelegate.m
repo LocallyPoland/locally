@@ -11,7 +11,6 @@
 #import <UMCore/UMModuleRegistryProvider.h>
 #import <FBSDKCoreKit/FBSDKCoreKit.h>
 
-
 #if DEBUG
 #import <FlipperKit/FlipperClient.h>
 #import <FlipperKitLayoutPlugin/FlipperKitLayoutPlugin.h>

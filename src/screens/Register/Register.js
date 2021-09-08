@@ -10,6 +10,13 @@ import { connect } from "react-redux";
 import { registerAction } from "../../store/actions/profileActions";
 import CustomImage from "../../misc/CustomImage/CustomImage";
 import { showModalAction } from "../../store/actions/baseActions";
+import {
+  AccessToken,
+  GraphRequest,
+  GraphRequestManager,
+  LoginButton,
+} from "react-native-fbsdk";
+import FacebookLogin from "../../misc/FacebookLogin/FacebookLogin";
 
 const Register = ({
   values,
@@ -18,10 +25,25 @@ const Register = ({
   handleSubmit,
   errors,
   validateForm,
+  facebookLogin,
+  showModal,
   touched,
   handleBlur,
 }) => {
   const redirectToLogin = () => navigation.navigate("Login");
+
+  const responseInfoCallback = async (error, result) => {
+    if (!error) {
+      const { name, id } = result;
+      const [fName, lName] = name.split(" ");
+      const isSuccess = await facebookLogin({ fName, lName, id });
+      if (isSuccess) {
+        navigation.navigate("Home");
+      } else {
+        showModal("Bląd logowania", "Coś poszło nie tak. Spróbuj ponownie.");
+      }
+    }
+  };
 
   useEffect(() => {
     validateForm();
@@ -29,89 +51,81 @@ const Register = ({
 
   return (
     <MainWrapper style={s.container} onBackPress={navigation.goBack}>
-      <ScrollView>
-        <Text style={s.title}>Rejestracja</Text>
-        <View style={s.infoContainer}>
-          <View style={s.inputsRow}>
-            <Input
-              placeholder="Jan"
-              onChangeText={handleChange("fName")}
-              value={values.fName}
-              onBlur={handleBlur("fName")}
-              isError={errors.fName && touched.fName}
-              containerStyle={s.inputRowContainer}
-              label="Imie"
-            />
-            <Input
-              placeholder="Kowalski"
-              onChangeText={handleChange("lName")}
-              value={values.lName}
-              onBlur={handleBlur("lName")}
-              isError={errors.lName && touched.lName}
-              containerStyle={{ ...s.inputRowContainer, marginRight: 0 }}
-              label="Nazwisko"
-            />
-          </View>
-          <Input
-            placeholder="567 867 316"
-            onChangeText={handleChange("phone")}
-            value={values.phone}
-            onBlur={handleBlur("phone")}
-            isError={errors.phone && touched.phone}
-            mask="+48-999-999-999"
-            containerStyle={s.inputContainer}
-            label="Telefon"
-          />
-          <Input
-            placeholder="jan-kowalski@gmail.com"
-            onChangeText={handleChange("email")}
-            value={values.email}
-            onBlur={handleBlur("email")}
-            isError={errors.email && touched.email}
-            containerStyle={s.inputContainer}
-            label="e-mail"
-          />
-          <Input
-            placeholder="********"
-            secureTextEntry
-            value={values.password}
-            onBlur={handleBlur("password")}
-            isError={errors.password && touched.password}
-            onChangeText={handleChange("password")}
-            containerStyle={s.inputContainer}
-            label="password"
-          />
-          <Button
-            title="Rejestracja"
-            onPress={handleSubmit}
-            disabled={!!Object.keys(errors).length}
-            style={s.buttonContainer}
-          />
-          <Text style={s.secondaryText}>albo</Text>
-          <Button
-            title="Facebook"
-            style={s.facebookButton}
-            textStyle={s.facebookButtonStyle}
-          >
-            <View style={s.facebookIconContainer}>
-              <CustomImage
-                width={15}
-                height={15}
-                source={require("../../../assets/icons/facebook.png")}
+      <Text style={s.title}>Rejestracja</Text>
+      <View>
+        <ScrollView>
+          <View style={s.infoContainer}>
+            <View style={s.inputsRow}>
+              <Input
+                placeholder="Jan"
+                onChangeText={handleChange("fName")}
+                value={values.fName}
+                onBlur={handleBlur("fName")}
+                isError={errors.fName && touched.fName}
+                containerStyle={s.inputRowContainer}
+                label="Imie"
+              />
+              <Input
+                placeholder="Kowalski"
+                onChangeText={handleChange("lName")}
+                value={values.lName}
+                onBlur={handleBlur("lName")}
+                isError={errors.lName && touched.lName}
+                containerStyle={{ ...s.inputRowContainer, marginRight: 0 }}
+                label="Nazwisko"
               />
             </View>
-          </Button>
-          <View style={s.registerContainer}>
-            <Text>Juz masz konto?</Text>
-            <TouchableOpacity onPress={redirectToLogin}>
-              <View style={s.linkContainer}>
-                <Text style={s.linkText}>Zaloguj się</Text>
-                <View style={s.border} />
-              </View>
-            </TouchableOpacity>
+            <Input
+              placeholder="567 867 316"
+              onChangeText={handleChange("phone")}
+              value={values.phone}
+              onBlur={handleBlur("phone")}
+              keyboardType="numeric"
+              isError={errors.phone && touched.phone}
+              mask="+48-999-999-999"
+              containerStyle={s.inputContainer}
+              label="Telefon"
+            />
+            <Input
+              placeholder="jan-kowalski@gmail.com"
+              onChangeText={handleChange("email")}
+              value={values.email}
+              autoCapitalize="none"
+              onBlur={handleBlur("email")}
+              isError={errors.email && touched.email}
+              containerStyle={s.inputContainer}
+              label="e-mail"
+            />
+            <Input
+              placeholder="********"
+              secureTextEntry
+              value={values.password}
+              onBlur={handleBlur("password")}
+              isError={errors.password && touched.password}
+              onChangeText={handleChange("password")}
+              containerStyle={s.inputContainer}
+              label="hasło"
+            />
+            <Button
+              title="Rejestracja"
+              onPress={handleSubmit}
+              disabled={!!Object.keys(errors).length}
+              style={s.buttonContainer}
+            />
+            <Text style={s.secondaryText}>albo</Text>
+            <FacebookLogin {...{ navigation }} />
+            <View style={s.registerContainer}>
+              <Text>Juz masz konto?</Text>
+              <TouchableOpacity onPress={redirectToLogin}>
+                <View style={s.linkContainer}>
+                  <Text style={s.linkText}>Zaloguj się</Text>
+                  <View style={s.border} />
+                </View>
+              </TouchableOpacity>
+            </View>
           </View>
-        </View>
-      </ScrollView>
+        </ScrollView>
+      </View>
     </MainWrapper>
   );
 };
@@ -147,16 +161,13 @@ const formikHoc = withFormik({
     { props: { register, navigation, showModal }, resetForm }
   ) => {
     let correctPhone = +values.phone.replace(/-/gi, "").replace("+", "") || 0;
-    console.log("values ===", { values, phone: correctPhone });
+    console.log("values register ===", { ...values, phone: correctPhone });
     const isSuccess = await register({ ...values, phone: correctPhone });
     console.log("isSuccess ===", isSuccess);
     if (isSuccess) {
-      navigation.navigate("Home");
+      navigation.navigate("EmailVerification");
     } else {
-      showModal(
-        "Bląd logowania",
-        "Takiego konta nie istnieje spróbuj zalogować się ponownie"
-      );
+      showModal("Bląd logowania", "Takie konto już istnieje");
     }
     resetForm({
       email: "",

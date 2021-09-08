@@ -13,9 +13,9 @@ export default StyleSheet.create({
     justifyContent: "space-between",
   },
   image: {
-    width: wp(40),
-    height: hp(100) <= 700 ? 120 : wp(40),
-    resizeMode: "contain",
+    alignSelf: "center",
+    width: hp(100) <= 700 ? 120 : wp(62),
+    height: hp(100) <= 700 ? 120 : wp(62),
   },
   title: {
     fontFamily: "PoppinsBold",
@@ -24,13 +24,18 @@ export default StyleSheet.create({
     textAlign: "center",
   },
   infoContainer: {
-    width: "100%",
+    width: wp(100),
     padding: wp(100) < 350 ? 20 : 30,
     borderColor: "#fff",
     borderWidth: 2,
+    backgroundColor: appColors.lightPurple,
+    borderBottomWidth: 0,
     borderTopLeftRadius: 30,
     borderTopRightRadius: 30,
     // flex: 1,
+  },
+  expandedInfoContainer: {
+    // transform: [{ translateY: -100 }],
   },
   inputContainer: {
     marginBottom: 5,

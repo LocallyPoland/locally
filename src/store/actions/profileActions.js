@@ -3,55 +3,92 @@ import {
   loginRequest,
   patchUser,
   registerRequest,
+  changePasswordRequest,
+  sendCodeRequest,
+  fetchUser,
 } from "../api/api";
 import { ADD_CARD, CLEAR_USER, SET_USER } from "./actionTypes";
+import { store } from "../store";
 
-export const registerAction = (user) => {
+export const registerAction = (data) => {
   return async (dispatch) => {
-    const response = await registerRequest(user);
-    if (response.status === 200) {
-      dispatch({ type: SET_USER, user });
+    try {
+      const response = await registerRequest(data);
+      const { user = {}, token } = response.data;
+      console.log("got token ===", token);
+      console.log("response ===", response.status);
+      dispatch({ type: SET_USER, user: { ...user, token } });
+      return true;
+    } catch (e) {
+      return false;
     }
-    return response.status === 200;
+  };
+};
+
+export const getUserAction = () => {
+  return async (dispatch) => {
+    try {
+      const {
+        profile: { token },
+      } = store.getState();
+      const response = await fetchUser(token);
+      const user = response.data;
+      console.log("user ===", user);
+      console.log("token ===", token);
+      if (user) {
+        dispatch({
+          type: SET_USER,
+          user: { ...user, token },
+        });
+      } else {
+        throw new Error("no user");
+      }
+      return user?.isVerified;
+    } catch (e) {
+      console.log("getUserAction err ===", e);
+      return false;
+    }
   };
 };
 
 export const loginAction = (data) => {
   return async (dispatch) => {
-    const response = await loginRequest(data);
-    console.log("response ===", response?.data);
-    if (response.status === 200) {
+    try {
+      const response = await loginRequest(data);
+      console.log("response data ===", response?.data);
       const { user, token } = response.data;
-      console.log("user ===", response.data.user);
       dispatch({ type: SET_USER, user: { ...user, token } });
-    } else {
-      dispatch({ type: SET_USER, user: {} });
+      return true;
+    } catch (e) {
+      console.log("loginAction err ===", e);
+      return false;
     }
-    return response.status === 200;
   };
 };
 
 export const facebookLoginAction = (user) => {
   return async (dispatch) => {
+    console.log("facebook login action");
     return facebookLoginRequest(user)
       .then((res) => {
-        const { user, token } = response.data;
-        console.log("user ===", response.data.user);
+        const { user, token } = res.data;
+        console.log("user ===", user);
+        console.log("token ===", token);
         dispatch({ type: SET_USER, user: { ...user, token } });
         return true;
       })
-      .catch((e) => false);
+      .catch((e) => {
+        console.log("facebook login error ===", e);
+        return false;
+      });
   };
 };
 
 export const editUserAction = (data, token) => {
   return async (dispatch) => {
     const response = await patchUser(data, token);
-    console.log("response ===", response);
-    console.log("response status ===", response.status);
     if (response.status === 200) {
-      console.log("user ===", response.data.user);
-      dispatch({ type: SET_USER, user: response.data.user });
+      dispatch({ type: SET_USER, user: data });
     }
     return response.status === 200;
   };
@@ -63,9 +100,27 @@ export const logoutAction = () => {
   };
 };
 
-export const restorePasswordAction = (password, userId) => {
+export const changePasswordAction = (email, password, code) => {
   return async (dispatch) => {
-    const response = await restorePasswordAction(password, userId);
-    console.log("response ===", response?.data);
+    console.log("here");
+    return changePasswordRequest({ email, password, code })
+      .then((res) => {
+        console.log("res ===", res.data);
+        // if (res?.status === 200) {
+        //   dispatch({ type: SET_USER, user: res.data.user });
+        // }
+        return true;
+      })
+      .catch((err) => {
+        console.log("changePasswordAction err ===", err);
+        return false;
+      });
+  };
+};
+
+export const sendVerificationCodeAction = (email) => {
+  return async (dispatch) => {
+    const response = await sendCodeRequest({ email });
+    return response?.status === 200;
   };
 };

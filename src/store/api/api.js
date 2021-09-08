@@ -1,15 +1,23 @@
 import _axios from "./_axios";
 
 export const registerRequest = (data) => {
-  return _axios.post("/register", data).catch((e) => e.response);
+  return _axios.post("/register", data);
 };
 
 export const loginRequest = (data) => {
-  return _axios.post("/login", data).catch((e) => e.response);
+  return _axios.post("/login", data);
 };
 
 export const facebookLoginRequest = (data) => {
-  return _axios.post("/fb", data).catch((e) => e.response);
+  return _axios.post("/fb", data);
+};
+
+export const fetchUser = (token) => {
+  return _axios.get("/user", {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
 };
 
 export const patchUser = (data, token) => {
@@ -26,12 +34,24 @@ export const fetchSettings = () => {
   return _axios.get("/settings");
 };
 
-export const restorePasswordRequest = (password, userId) => {
-  return _axios.patch(`/user/restore/${userId}`);
+export const sendCodeRequest = (data) => {
+  return _axios.post(`/restore/password`, data).catch((e) => e.response);
+};
+
+export const changePasswordRequest = (data) => {
+  return _axios.post("/change/password", data);
 };
 
 export const postOrder = (order, token) => {
   return _axios.post("/order", order, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+};
+
+export const deleteOrder = (orderId, token) => {
+  return _axios.delete(`/order/${orderId}`, {
     headers: {
       Authorization: `Bearer ${token}`,
     },

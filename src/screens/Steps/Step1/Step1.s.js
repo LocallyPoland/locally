@@ -45,7 +45,7 @@ export default StyleSheet.create({
     paddingHorizontal: wp(8),
     paddingVertical: 10,
     marginVertical: 10,
-    height: hp(8),
+    height: hp(100) < 700 ? hp(8) : hp(14),
   },
   autocompleteItem: {
     flexDirection: "row",

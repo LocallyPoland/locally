@@ -44,7 +44,6 @@ const Step2 = ({
     filterPlaces(values.deliveryAddress);
   }, [values.deliveryAddress]);
 
-  console.log("values step2 ===", values);
   return (
     <ScrollView>
       <View style={s.imageContainer}>
@@ -93,7 +92,7 @@ const Step2 = ({
                 source={require("../../../../assets/icons/Subtract.png")}
               />
               <Text style={s.autocompleteItemText}>{deliveryAddress}</Text>
-              <Text style={s.autocompleteItemTextSecondary}>Rzeczow</Text>
+              <Text style={s.autocompleteItemTextSecondary}>Rzeszów</Text>
             </TouchableOpacity>
           );
         })}
@@ -101,7 +100,7 @@ const Step2 = ({
       <Button
         onPress={onSubmit}
         style={s.button}
-        disabled={errors.delivery}
+        disabled={errors.deliveryAddress}
         textStyle={s.buttonText}
         title={`Następny krok`}
       />

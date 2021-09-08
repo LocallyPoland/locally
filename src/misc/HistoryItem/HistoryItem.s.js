@@ -18,7 +18,8 @@ export default StyleSheet.create({
     backgroundColor: appColors.lightPurple,
     justifyContent: "space-between",
     borderRadius: 20,
-    height: wp(60),
+    height: wp(65),
+    maxHeight: 300,
     width: wp(80),
     // marginLeft: wp(4),
     position: "relative",
@@ -45,9 +46,10 @@ export default StyleSheet.create({
     paddingHorizontal: 9,
   },
   rowMainContent: {
-    flex: 1,
+    // flex: 1,
     marginLeft: 20,
     flexDirection: "row",
+    width: "70%",
   },
   rowSection: {
     flexDirection: "column",
@@ -105,5 +107,13 @@ export default StyleSheet.create({
   },
   text: {
     fontSize: mwp(4, 20, 10),
+  },
+  cancelButton: {
+    paddingHorizontal: 15,
+    paddingVertical: 3,
+    backgroundColor: "#00000000",
+  },
+  cancelButtonText: {
+    color: "#FF0000",
   },
 });

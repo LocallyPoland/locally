@@ -60,7 +60,7 @@ const CreatePlace = ({
       <ScrollView ref={scrollRef}>
         <View style={{ flex: 1 }}>
           <Text style={s.title}>
-            {isEditing ? "Zmienić addres" : "Dodaj addres"}
+            {isEditing ? "Edytuj addres" : "Dodaj addres"}
           </Text>
           <CustomImage
             style={s.plus}
@@ -80,7 +80,7 @@ const CreatePlace = ({
           </OuterShadowWrapper>
           <View style={s.button}>
             <Button
-              title={isEditing ? "Zmienić" : "Dodaj"}
+              title={isEditing ? "Zmień" : "Dodaj"}
               onPress={handleSubmit}
               style={s.buttonContainer}
             />

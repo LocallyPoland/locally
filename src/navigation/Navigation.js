@@ -11,11 +11,7 @@ import Profile from "../screens/Profile/Profile";
 import EditOrder from "../screens/EditOrder/EditOrder";
 import AddCard from "../screens/AddCard/AddCard";
 import Cards from "../screens/Cards/Cards";
-import Step1 from "../screens/Steps/Step1/Step1";
-import Step2 from "../screens/Steps/Step2/Step2";
-import Step3 from "../screens/Steps/Step3/Step3";
-import Step4 from "../screens/Steps/Step4/Step4";
-import Step5 from "../screens/Steps/Step5/Step5";
+import SplashScreen from "react-native-splash-screen";
 import { createStackNavigator } from "@react-navigation/stack";
 import { connect } from "react-redux";
 import Places from "../screens/Places/Places";
@@ -24,15 +20,22 @@ import CreateOrder from "../screens/CreateOrder/CreateOrder";
 import EditCard from "../screens/EditCard/EditCard";
 import CreatePlace from "../screens/CreatePlace/CreatePlace";
 import { getSettingsAction } from "../store/actions/baseActions";
+import ChangePassword from "../screens/ChangePassword/ChangePassword";
+import EmailVerification from "../screens/EmailVerification/EmailVerification";
 
 const Stack = createStackNavigator();
 
 const Navigation = ({ profile, getSettings }) => {
   const fontState = FontState();
-  const isLogged = !!profile._id;
+  const isLogged = !!(profile._id && profile.isVerified);
+
+  console.log("profile ===", profile);
 
   useEffect(() => {
-    getSettings();
+    (async () => {
+      await getSettings();
+      SplashScreen.hide();
+    })();
   }, []);
   return (
     !!fontState.fontsLoaded && (
@@ -42,7 +45,7 @@ const Navigation = ({ profile, getSettings }) => {
             headerShown: false,
           }}
         >
-          <Stack.Navigator initialRouteName={isLogged ? "Place" : "Login"}>
+          <Stack.Navigator initialRouteName={isLogged ? "Home" : "Login"}>
             <Stack.Screen
               options={{ headerShown: false }}
               name="Home"
@@ -107,6 +110,16 @@ const Navigation = ({ profile, getSettings }) => {
               options={{ headerShown: false }}
               name="RestorePassword"
               component={RestorePassword}
+            />
+            <Stack.Screen
+              options={{ headerShown: false }}
+              name="ChangePassword"
+              component={ChangePassword}
+            />
+            <Stack.Screen
+              options={{ headerShown: false }}
+              name="EmailVerification"
+              component={EmailVerification}
             />
           </Stack.Navigator>
         </NavigationContainer>

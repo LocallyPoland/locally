@@ -9,7 +9,14 @@ const initialState = {
     onReject: () => {},
     onResolve: () => {},
   },
-  settings: {},
+  settings: {
+    isError: false,
+    price: 0,
+    priceForCustomer: 0,
+    switcher: false,
+    timeStart: null,
+    timeStop: null,
+  },
 };
 
 export default (state = initialState, action) => {

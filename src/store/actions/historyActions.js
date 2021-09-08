@@ -8,11 +8,14 @@ export const getHistoryAction = () => {
     fetchHistory(token)
       .then((res) => {
         console.log("history res ===", res?.data);
+        if (res.data.error) {
+          throw new Error("history error");
+        }
         dispatch({
           type: SET_HISTORY,
           history: res.data,
         });
       })
-      .catch(console.error);
+      .catch(console.log);
   };
 };

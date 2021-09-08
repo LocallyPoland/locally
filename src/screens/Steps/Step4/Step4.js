@@ -1,21 +1,16 @@
 import React, { useState } from "react";
 import s from "./Step4.s";
-import StepWrapper from "../../../wrappers/StepWrapper/StepWrapper";
-import { withFormik } from "formik";
 import { connect } from "react-redux";
-import { Image, ScrollView, Text, TouchableOpacity, View } from "react-native";
+import { ScrollView, Text, TouchableOpacity, View } from "react-native";
 import HorizontalScrollPicker from "../../../misc/HorizontalScrollPicker/HorizontalScrollPicker";
 import Button from "../../../misc/Button/Button";
 import OuterShadowWrapper from "../../../wrappers/OuterShadowWrapper/OuterShadowWrapper";
-import {
-  heightPercentageToDP as hp,
-  widthPercentageToDP as wp,
-} from "react-native-responsive-screen";
-import SvgUri from "react-native-svg-uri";
+import { widthPercentageToDP as wp } from "react-native-responsive-screen";
 import InnerShadowWrapper from "../../../wrappers/InnerShadowWrapper/InnerShadowWrapper";
 import classnames from "classnames-react-native";
 import { appColors } from "../../../styles/styles";
 import CustomImage from "../../../misc/CustomImage/CustomImage";
+import ScrollPicker from "../../../misc/ScrollPicker/ScrollPicker";
 
 const Step4 = ({ values, setValues, onSubmit, stepNumber, errors }) => {
   const setMailType = () => {
@@ -31,18 +26,15 @@ const Step4 = ({ values, setValues, onSubmit, stepNumber, errors }) => {
     });
   };
 
-  console.log("values step4 ===", values);
-
   const setActiveWeightItem = (weight) => {
-    console.log("here weight");
     setValues({ ...values, weight });
   };
   const setActiveLengthItem = (length) => {
     setValues({ ...values, length });
   };
   return (
-    <ScrollView>
-      <View style={s.container}>
+    <View style={s.container}>
+      <ScrollView nestedScrollEnabled>
         <View>
           <View style={s.typeSwitchContainer}>
             <View style={s.textContainer}>
@@ -52,11 +44,11 @@ const Step4 = ({ values, setValues, onSubmit, stepNumber, errors }) => {
                 przesyłki
               </Text>
             </View>
-            {values.parcel === "box" ? (
+            {values.parcel !== "box" ? (
               <View style={s.typeSwitchButtons}>
-                <OuterShadowWrapper height={wp(20)} width={wp(35)}>
+                <OuterShadowWrapper height={wp(20)} width={s.innerShadow.width}>
                   <TouchableOpacity
-                    // onPress={setBoxType}
+                    onPress={setBoxType}
                     style={classnames(
                       s.typeSwitchButton,
                       s.typeSwitchButtonActive
@@ -66,8 +58,8 @@ const Step4 = ({ values, setValues, onSubmit, stepNumber, errors }) => {
                       <CustomImage
                         style={s.switchButtonIcon}
                         source={require("../../../../assets/icons/box.png")}
-                        width={wp(8)}
-                        height={wp(8)}
+                        width={wp(7)}
+                        height={wp(7)}
                       />
                       <Text style={s.switchButtonText}>Paczka</Text>
                     </View>
@@ -83,11 +75,11 @@ const Step4 = ({ values, setValues, onSubmit, stepNumber, errors }) => {
                         fill={appColors.darkBlue}
                         style={s.switchButtonIcon}
                         source={require("../../../../assets/icons/mail.png")}
-                        width={wp(8)}
-                        height={wp(8)}
+                        width={wp(7)}
+                        height={wp(7)}
                       />
                       {/*<Image style={classnames(s.switchButtonIcon, s.switchButtonImage)} source={require("../../../../assets/icons/mail.png")} />*/}
-                      <Text style={s.switchButtonText}>Lista</Text>
+                      <Text style={s.switchButtonText}>List</Text>
                     </View>
                   </TouchableOpacity>
                 </InnerShadowWrapper>
@@ -105,16 +97,16 @@ const Step4 = ({ values, setValues, onSubmit, stepNumber, errors }) => {
                         style={s.switchButtonIcon}
                         fill={appColors.darkBlue}
                         source={require("../../../../assets/icons/box.png")}
-                        width={wp(8)}
-                        height={wp(8)}
+                        width={wp(7)}
+                        height={wp(7)}
                       />
                       <Text style={s.switchButtonText}>Paczka</Text>
                     </View>
                   </TouchableOpacity>
                 </InnerShadowWrapper>
-                <OuterShadowWrapper height={wp(20)} width={wp(35)}>
+                <OuterShadowWrapper height={wp(20)} width={s.innerShadow.width}>
                   <TouchableOpacity
-                    // onPress={setBoxType}
+                    onPress={setMailType}
                     style={classnames(
                       s.typeSwitchButton,
                       s.typeSwitchButtonActive
@@ -125,63 +117,61 @@ const Step4 = ({ values, setValues, onSubmit, stepNumber, errors }) => {
                         fill={appColors.purple}
                         style={s.switchButtonIcon}
                         source={require("../../../../assets/icons/mail.png")}
-                        width={wp(8)}
-                        height={wp(8)}
+                        width={wp(7)}
+                        height={wp(7)}
                       />
                       {/*<Image style={classnames(s.switchButtonIcon, s.switchButtonImage)} source={require("../../../../assets/icons/mail.png")} />*/}
-                      <Text style={s.switchButtonText}>Lista</Text>
+                      <Text style={s.switchButtonText}>List</Text>
                     </View>
                   </TouchableOpacity>
                 </OuterShadowWrapper>
               </View>
             )}
           </View>
+
           {values.parcel === "box" ? (
-            <View style={s.weightContainer}>
-              <View style={{ ...s.textContainer, marginBottom: 10 }}>
-                <View style={s.textLine} />
-                <Text style={s.text}>
-                  <Text style={s.textBold}>Wybierz wagę </Text>
-                  przesyłki w wymiarze
-                  <Text style={s.textBold}> kg</Text>
-                </Text>
+            <>
+              <Text style={s.text}>
+                <Text style={s.textBold}>Wybierz wagę </Text>
+                oraz <Text style={s.textBold}>największy wymiar </Text>
+                przesyłki
+              </Text>
+              <View style={s.pickersContainer}>
+                <View style={s.weightContainer}>
+                  <ScrollPicker
+                    title="kg"
+                    numberOfItems={25}
+                    activeItem={values.weight}
+                    setActiveItem={setActiveWeightItem}
+                  />
+                </View>
+                <View style={s.weightContainer}>
+                  <ScrollPicker
+                    title="cm"
+                    numberOfItems={20}
+                    itemsStep={5}
+                    activeItem={values.length}
+                    setActiveItem={setActiveLengthItem}
+                  />
+                </View>
               </View>
-              <HorizontalScrollPicker
-                separator="kg"
-                numberOfItems={100}
-                activeItem={values.weight}
-                setActiveItem={setActiveWeightItem}
-              />
-            </View>
+            </>
           ) : (
-            <View style={s.weightContainer}>
-              <View style={{ ...s.textContainer, marginBottom: 10 }}>
-                <View style={s.textLine} />
-                <Text style={s.text}>
-                  <Text style={s.textBold}>Wybierz maksymalny rozmiar </Text>
-                  przesyłki w wymiarze
-                  <Text style={s.textBold}> cm</Text>
-                </Text>
-              </View>
-              <HorizontalScrollPicker
-                separator="cm"
-                numberOfItems={100}
-                itemsStep={5}
-                activeItem={values.length}
-                setActiveItem={setActiveLengthItem}
-              />
-            </View>
+            <Text style={s.emptyText}>
+              Nie musisz określać gabarytów listu. Aby kontynuować, kliknij
+              <Text style={s.textBold}>"Następny krok"</Text>
+            </Text>
           )}
         </View>
-        <Button
-          onPress={onSubmit}
-          style={s.button}
-          textStyle={s.buttonText}
-          disabled={errors.length || errors.weight}
-          title={`Następny krok`}
-        />
-      </View>
-    </ScrollView>
+      </ScrollView>
+      <Button
+        onPress={onSubmit}
+        style={s.button}
+        textStyle={s.buttonText}
+        disabled={(!values.length || !values.weight) && values.parcel === "box"}
+        title="Następny krok"
+      />
+    </View>
   );
 };
 

@@ -1,21 +1,28 @@
 import { StyleSheet } from "react-native";
 import { appColors } from "../../styles/styles";
+import {
+  heightPercentageToDP as hp,
+  widthPercentageToDP as wp,
+} from "react-native-responsive-screen";
 
 export default StyleSheet.create({
   container: {
-    width: 120,
+    zIndex: 100,
+    width: wp(30),
+    flex: 1,
     borderRadius: 25,
   },
   list: {
-    height: 140,
+    height: hp(100) > 1000 ? 300 : 140,
     paddingVertical: 15,
     paddingHorizontal: 25,
+    zIndex: 100,
   },
   firstItem: {
-    marginTop: 30,
+    marginTop: 10,
   },
   item: {
-    height: 35,
+    height: hp(100) > 1000 ? 100 : hp(5),
     justifyContent: "space-between",
     flexDirection: "row",
   },
@@ -24,20 +31,20 @@ export default StyleSheet.create({
     alignItems: "flex-end",
   },
   line: {
-    height: 2.5,
-    width: 11,
+    height: hp(100) > 1000 ? 5 : 2,
+    width: hp(100) > 1000 ? 30 : 12,
     backgroundColor: appColors.anotherPurple,
   },
   mainLine: {
-    width: 20,
-    height: 4,
+    width: hp(100) > 1000 ? 40 : 20,
+    height: hp(100) > 1000 ? 7 : 3,
   },
   activeLine: {
     backgroundColor: appColors.purple,
   },
   activeItem: {},
   text: {
-    fontSize: 17,
+    fontSize: wp(5),
     fontFamily: "PoppinsRegular",
     textAlign: "center",
   },
@@ -48,13 +55,13 @@ export default StyleSheet.create({
     color: appColors.text,
   },
   activeText: {
-    fontSize: 30,
+    fontSize: wp(7),
     fontFamily: "PoppinsRegular",
-    lineHeight: 35,
+    lineHeight: wp(9),
     color: appColors.purple,
     textAlign: "center",
   },
   lastItem: {
-    marginBottom: 50,
+    marginBottom: 10,
   },
 });

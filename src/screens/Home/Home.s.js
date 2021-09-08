@@ -15,7 +15,9 @@ export default StyleSheet.create({
   mainContent: {
     paddingHorizontal: 15,
     flex: 1,
-    justifyContent: "space-between",
+  },
+  mainContentInner: {
+    flex: 1,
   },
   userName: {
     fontFamily: "PoppinsBold",
@@ -26,12 +28,13 @@ export default StyleSheet.create({
     textAlign: "right",
   },
   balanceContainer: {
-    marginTop: 30,
+    flex: 1,
+    justifyContent: "center",
   },
   balance: {
     fontFamily: "PoppinsBold",
-    lineHeight: 45,
-    fontSize: 38,
+    lineHeight: wp(14),
+    fontSize: wp(12),
     textAlign: "center",
     color: appColors.purple,
   },
@@ -39,9 +42,9 @@ export default StyleSheet.create({
     marginTop: 10,
     fontFamily: "PoppinsRegular",
     textAlign: "center",
-    lineHeight: 26,
+    lineHeight: wp(6),
     color: appColors.anotherText,
-    fontSize: 16,
+    fontSize: wp(5),
   },
   actionsContainer: {
     padding: 10,
@@ -50,7 +53,7 @@ export default StyleSheet.create({
     textAlign: "left",
     fontFamily: "PoppinsSemiBold",
     marginLeft: 15,
-    width: 150,
+    fontSize: wp(4),
     color: appColors.darkBlue,
   },
   cardsContainer: {

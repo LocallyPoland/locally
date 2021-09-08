@@ -10,14 +10,18 @@ const ScrollPicker = ({
   setActiveItem = () => {},
   title,
   itemsStep = 1,
+  dataArray,
 }) => {
   const [itemHeight, setItemHeight] = useState(0);
 
   const data = useMemo(() => {
-    return [...Array(numberOfItems).keys()].map((item, id) => ({
-      id,
-      title: `${item * itemsStep}`,
-    }));
+    return (
+      dataArray ||
+      [...Array(numberOfItems).keys()].map((item, id) => ({
+        id,
+        title: `${item * itemsStep}`,
+      }))
+    );
   }, [numberOfItems, itemsStep]);
 
   const scrollRef = useRef();
@@ -25,17 +29,21 @@ const ScrollPicker = ({
   const onScroll = ({ nativeEvent }) => {
     const { y } = nativeEvent.contentOffset;
     const { height: layoutHeight } = nativeEvent.layoutMeasurement;
-    console.log("step ===", itemsStep);
-    console.log("y ===", y);
+    const { height: contentHeight } = nativeEvent.contentSize;
+    // const {height: scrollHeight} = nativeEvent.
     if (y === 0) {
       setActiveItem(0);
+      return;
+    }
+    console.log("contentHeight ===", contentHeight);
+    console.log("condition ===", Math.round(y + layoutHeight));
+    if (Math.round(y + layoutHeight) === contentHeight) {
+      setActiveItem((data.length - 1) * itemsStep);
       return;
     }
     const value =
       Math.floor(y / itemHeight) + Math.floor(layoutHeight / itemHeight / 2);
     setActiveItem(value * itemsStep);
-    console.log("active ===", value);
-    console.log("hgsdjhfjkd g=== ", y, itemHeight);
   };
 
   const onMomentumScrollEnd = ({ nativeEvent }) => {
@@ -44,14 +52,19 @@ const ScrollPicker = ({
     // });
   };
 
-  console.log("active ===", activeItem);
-  console.log("step ===", itemsStep);
+  const onItemPress = ({ title }) => {
+    console.log("title ===", title);
+    setActiveItem(+title);
+  };
+
+  console.log("active ==", activeItem);
 
   return (
-    <View>
+    <View style={{ zIndex: 1000 }}>
       {!!title && <Text style={s.title}>{title}</Text>}
       <InnerShadowWrapper style={s.container}>
         <FlatList
+          nestedScrollEnabled
           ref={scrollRef}
           {...{ onScroll }}
           {...{ data }}
@@ -70,7 +83,7 @@ const ScrollPicker = ({
           //   stickyHeaderIndices={[0]}
           style={s.list}
           renderItem={(el) => {
-            const { item, onPress = () => {}, index } = el;
+            const { item, index } = el;
             return (
               <TouchableOpacity
                 onLayout={({ nativeEvent }) => {
@@ -84,7 +97,7 @@ const ScrollPicker = ({
                   [s.firstItem, index === 0],
                   [s.lastItem, index === numberOfItems - 1]
                 )}
-                onPress={onPress}
+                onPress={() => onItemPress(item)}
               >
                 <Text
                   style={classnames(s.text, [

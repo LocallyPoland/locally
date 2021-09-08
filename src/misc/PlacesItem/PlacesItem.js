@@ -1,4 +1,4 @@
-import React, { useMemo } from "react";
+import React, { useMemo, useState } from "react";
 import s from "./PlacesItem.s";
 import OuterShadowWrapper from "../../wrappers/OuterShadowWrapper/OuterShadowWrapper";
 import { widthPercentageToDP as wp } from "react-native-responsive-screen";
@@ -12,6 +12,7 @@ import CustomImage from "../CustomImage/CustomImage";
 
 const PlacesItem = ({ deletePlace, place, navigation }) => {
   const { deliveryAddress, _id } = place;
+
   console.log("place item ===", place);
   const deletePlaceHandler = () => deletePlace(_id);
   const editPlaceHandler = () =>
@@ -43,7 +44,7 @@ const PlacesItem = ({ deletePlace, place, navigation }) => {
   }, []);
   return (
     <Swipeable
-      leftButtonWidth={75}
+      leftButtonWidth={70}
       rightActionActivationDistance={20}
       leftButtons={leftButtons}
       rightButtons={rightButtons}

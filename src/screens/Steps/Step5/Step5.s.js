@@ -1,18 +1,27 @@
 import { StyleSheet } from "react-native";
-import { widthPercentageToDP as wp } from "react-native-responsive-screen";
+import {
+  widthPercentageToDP as wp,
+  heightPercentageToDP as hp,
+} from "react-native-responsive-screen";
 import { appColors } from "../../../styles/styles";
 
 export default StyleSheet.create({
   container: {
     flex: 1,
     justifyContent: "space-between",
-    marginVertical: 30,
+    marginVertical: hp(6),
   },
   inner: {
     flex: 1,
   },
-  infoContainer: {
-    marginBottom: 20,
+  infoContainer: {},
+  inputContainer: {
+    marginVertical: 20,
+  },
+  input: {
+    fontSize: 14,
+    textAlignVertical: "center",
+    minHeight: 60,
   },
   textContainer: {
     position: "relative",
@@ -47,4 +56,5 @@ export default StyleSheet.create({
   addCard: {
     marginTop: -20,
   },
+  buttonContainer: {},
 });

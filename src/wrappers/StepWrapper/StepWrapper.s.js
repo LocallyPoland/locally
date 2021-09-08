@@ -28,6 +28,7 @@ export default StyleSheet.create({
     textAlign: "center",
     color: appColors.lightGray,
     fontFamily: "PoppinsBold",
+    fontSize: mwp(5, 30),
   },
   stepsContainer: { flexDirection: "row" },
   step: {
@@ -35,11 +36,11 @@ export default StyleSheet.create({
     alignItems: "center",
   },
   stepCircle: {
-    width: 18,
-    height: 18,
+    width: wp(5),
+    height: wp(5),
     borderRadius: 25,
     borderColor: appColors.darkBlue,
-    borderWidth: 2,
+    borderWidth: wp(0.5),
     opacity: 0.5,
   },
   activeCircle: {
@@ -47,13 +48,13 @@ export default StyleSheet.create({
   },
   stepCircleInner: {
     flex: 1,
-    margin: 2,
+    margin: wp(0.5),
     backgroundColor: appColors.darkBlue,
     borderRadius: 25,
   },
   stepLine: {
     width: wp(10),
-    height: 2,
+    height: wp(0.5),
     backgroundColor: appColors.darkBlue,
     opacity: 0.5,
   },
@@ -73,13 +74,13 @@ export default StyleSheet.create({
     height: 80,
   },
   titleText: {
-    fontSize: mwp(5, 22, 14),
-
+    fontSize: mwp(5, 32, 14),
     fontFamily: "PoppinsBold",
     textAlignVertical: "center",
-    lineHeight: 27,
+    lineHeight: mwp(6, 35, 14),
     color: appColors.darkBlue,
     height: 100,
+    marginLeft: wp(2),
   },
   titleNumber: {},
   inner: {

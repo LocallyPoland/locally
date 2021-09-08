@@ -41,7 +41,7 @@ const Profile = ({
       <MainWrapper style={s.container} onBackPress={navigation.goBack}>
         <Button
           style={s.logoutButton}
-          title="logout"
+          title="Wyloguj"
           onPress={logoutHandler}
           textStyle={s.logoutButtonText}
         />
@@ -57,7 +57,7 @@ const Profile = ({
             <Input
               placeholder="Jimmy"
               containerStyle={{ ...s.smallInput, marginRight: 10 }}
-              label="Imie"
+              label="Imię"
               onChangeText={handleChange("fName")}
               value={values.fName}
             />
@@ -72,7 +72,8 @@ const Profile = ({
           <Input
             placeholder="jimmycarr@carr.com"
             containerStyle={s.inputContainer}
-            label="adres e-mail"
+            label="Adres e-mail"
+            withoutCapitalize
             onChangeText={handleChange("email")}
             value={values.email}
           />
@@ -84,13 +85,6 @@ const Profile = ({
             onChangeText={handleChange("phone")}
             value={values.phone}
             keyboardType="numeric"
-          />
-          <Input
-            placeholder="********"
-            containerStyle={s.inputContainer}
-            label="Hasło"
-            onChangeText={handleChange("password")}
-            value={values.password}
           />
 
           <Button
@@ -106,26 +100,22 @@ const Profile = ({
 
 const formikHOC = withFormik({
   mapPropsToValues: (props) => {
-    const { fName, lName, email, phone, password } = props.user;
+    const { fName, lName, email, phone } = props.user;
     console.log("profile ===", props.user);
     return {
       fName,
       lName,
       email,
       phone: `${phone}`,
-      password: "",
     };
   },
   validationSchema: yup.object().shape({
-    pickUp: yup.string().required(),
-    userID: yup.string().required(),
-    deliveryCity: yup.string().required(),
-    deliveryStreet: yup.string().required(),
-    deliveryHouse: yup.string().required(),
-    weight: yup.number(),
-    length: yup.number(),
+    fName: yup.string(),
+    lName: yup.string(),
+    email: yup.string().required(),
+    phone: yup.string(),
   }),
-  handleSubmit: async (values, { props: { editUser, user } }) => {
+  handleSubmit: async (values, { props: { editUser, user, showModal } }) => {
     console.log("values ===", values);
     const isSuccess = await editUser(
       {
@@ -135,6 +125,12 @@ const formikHOC = withFormik({
       user.token
     );
     console.log("isSuccess ===", isSuccess);
+    if (isSuccess) {
+      showModal(
+        "Profil zaktualizowany pomyślnie",
+        "Po wylogowaniu będziesz musiał zalogować się ponownie, aby korzystać z aplikacji."
+      );
+    }
   },
 })(Profile);
 

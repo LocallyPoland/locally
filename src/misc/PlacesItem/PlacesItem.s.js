@@ -48,7 +48,7 @@ export default StyleSheet.create({
   swipeButton: {
     height: wp(25),
     marginTop: 20,
-    paddingHorizontal: 10,
+    paddingHorizontal: wp(5),
     justifyContent: "center",
   },
   swipeButtonText: {

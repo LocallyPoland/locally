@@ -6,7 +6,12 @@ import MainWrapper from "../../wrappers/MainWrapper/MainWrapper";
 import { Text, TouchableOpacity, View, Image, ScrollView } from "react-native";
 import Input from "../../misc/Input/Input";
 import Button from "../../misc/Button/Button";
-import { restorePasswordAction } from "../../store/actions/profileActions";
+import {
+  restorePasswordAction,
+  sendVerificationCodeAction,
+} from "../../store/actions/profileActions";
+import { object, string } from "yup";
+import { showModalAction } from "../../store/actions/baseActions";
 
 const RestorePassword = ({
   values,
@@ -18,9 +23,11 @@ const RestorePassword = ({
   navigation,
 }) => {
   const redirectToRegister = () => navigation.navigate("Register");
+
   return (
-    <ScrollView>
-      <MainWrapper title="Przywrócenie hasła" onBackPress={navigation.goBack}>
+    <MainWrapper style={s.container} onBackPress={navigation.goBack}>
+      <ScrollView>
+        <Text style={s.title}>Przywrócenie{"\n"}hasła</Text>
         <View style={s.imageContainer}>
           <Image
             style={s.image}
@@ -31,41 +38,19 @@ const RestorePassword = ({
           <Input
             placeholder="jan-kowalski@gmail.com"
             onChangeText={handleChange("email")}
+            autoCapitalize="none"
             value={values.email}
             containerStyle={s.inputContainer}
             isError={errors.email && touched.email}
             onBlur={handleBlur("email")}
             label="E-mail"
           />
-          <Input
-            placeholder="********"
-            onChangeText={handleChange("password")}
-            value={values.password}
-            containerStyle={s.inputContainer}
-            isError={errors.password && touched.password}
-            onBlur={handleBlur("password")}
-            secureTextEntry
-            label="Hasło"
+          <Button
+            title="Zmien hasło"
+            onPress={handleSubmit}
+            disabled={errors.email || !values.email}
+            style={s.buttonContainer}
           />
-          <Input
-            placeholder="********"
-            onChangeText={handleChange("passwordConfirm")}
-            value={values.passwordConfirm}
-            isError={errors.passwordConfirm && touched.passwordConfirm}
-            containerStyle={s.inputContainer}
-            onBlur={handleBlur("passwordConfirm")}
-            secureTextEntry
-            label="Potwierdź hasło"
-          />
-
-          {values.email !== null && (
-            <Button
-              title="Przywrócić hasło"
-              onPress={handleSubmit}
-              disabled={Object.keys(errors).length}
-              style={s.buttonContainer}
-            />
-          )}
           <View style={s.textContainer}>
             <Text>Jeszcze nie masz konta?</Text>
             <TouchableOpacity onPress={redirectToRegister}>
@@ -76,39 +61,35 @@ const RestorePassword = ({
             </TouchableOpacity>
           </View>
         </View>
-      </MainWrapper>
-    </ScrollView>
+      </ScrollView>
+    </MainWrapper>
   );
 };
 
 const formikHOC = withFormik({
   mapPropsToValues: () => ({
     email: "",
-    passwordConfirm: "",
-    password: "",
   }),
-  validate: ({ password, passwordConfirm, email }) => {
-    const errors = {};
-    const emailRegex = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-    if (password.length <= 5) {
-      errors.password = "length";
+  validationSchema: object().shape({
+    email: string().email().required(),
+  }),
+  handleSubmit: async (
+    { email },
+    { props: { sendCode, navigation, showModal } }
+  ) => {
+    const isSuccess = await sendCode(email);
+    if (isSuccess) {
+      navigation.navigate("ChangePassword", { email });
+    } else {
+      showModal("Bląd logowania", "Coś poszło nie tak. Spróbuj ponownie.");
     }
-    if (passwordConfirm.length <= 5 || passwordConfirm !== password) {
-      errors.passwordConfirm = "length";
-    }
-    if (!emailRegex.test(email)) {
-      errors.email = "invalid";
-    }
-    return errors;
-  },
-  handleSubmit: async ({ password }, { props: { restorePassword } }) => {
-    restorePassword(password);
   },
 })(RestorePassword);
 
 const mapStateToProps = (state) => ({});
 const mapDispatchToProps = (dispatch) => ({
-  restorePassword: (password) => dispatch(restorePasswordAction(password)),
+  sendCode: (email) => dispatch(sendVerificationCodeAction(email)),
+  showModal: (title, desc) => dispatch(showModalAction(title, desc)),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(formikHOC);

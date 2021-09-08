@@ -14,8 +14,8 @@ export default StyleSheet.create({
   backButtonContainer: {
     zIndex: 100,
     padding: 10,
-    height: 50,
-    width: 50,
+    height: wp(12),
+    width: wp(12),
     position: "absolute",
     top: hp(3),
     left: 15,
@@ -25,10 +25,10 @@ export default StyleSheet.create({
     elevation: 6,
     backgroundColor: "#E6EEF8",
     borderRadius: 50,
-    width: 35,
+    width: wp(10),
     alignItems: "center",
     justifyContent: "center",
-    height: 35,
+    height: wp(10),
   },
   gradient: {},
   inner: {

@@ -1,29 +1,87 @@
-import React, { useMemo } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import s from "./HistoryItem.s";
 import { View, Text, Image } from "react-native";
 import OuterShadowWrapper from "../../wrappers/OuterShadowWrapper/OuterShadowWrapper";
 import {
-  heightPercentageToDP as hp,
   widthPercentageToDP as wp,
+  heightPercentageToDP as hp,
 } from "react-native-responsive-screen";
 import classnames from "classnames-react-native";
-import SvgUri from "react-native-svg-uri";
+import Button from "../Button/Button";
+import { connect } from "react-redux";
+import { cancelOrderAction } from "../../store/actions/orderActions";
+import { showModalAction } from "../../store/actions/baseActions";
 
-const HistoryItem = ({ item = {}, onlyBaseInfo, containerStyle }) => {
-  const { number, status, maxWeight, maxHeight, address, price } = item;
+const HistoryItem = ({
+  item = {},
+  onlyBaseInfo,
+  containerStyle,
+  cancelOrder,
+  showModal,
+}) => {
+  const {
+    number,
+    status,
+    maxWeight,
+    maxHeight,
+    address,
+    price,
+    _id,
+    hours,
+    minutes,
+    createdAt,
+  } = item;
   const statusText = useMemo(() => {
     switch (status) {
       case "coming":
         return "w trakcie";
-      case "came":
+      case "done":
         return "zakonczone";
       default:
         break;
     }
   }, [status]);
-  const isActive = status === "coming";
+
+  const [isCancelable, setCancelable] = useState(
+    new Date(createdAt).getTime() + 180000 > new Date().getTime()
+  );
+
+  const cancelOrderHandler = () => {
+    showModal(
+      "Anulować zamówienie?",
+      "Czy na pewno chcesz anulować zamówienie?",
+      () => cancelOrder(_id)
+    );
+  };
+
+  console.log("maxWeight ===", maxWeight);
+  console.log("maxHeight ===", maxHeight);
+  console.log("isonlybase ===", onlyBaseInfo);
+
+  console.log("isCancelable ===", isCancelable);
+
+  useEffect(() => {
+    console.log(
+      "new Date(createdAt).getTime() + 180000 ===",
+      new Date(createdAt).toLocaleString()
+    );
+    const cancelableTime = new Date(createdAt).getTime() + 180000;
+    const currentTime = new Date().getTime();
+    if (cancelableTime > currentTime) {
+      setCancelable(true);
+      setTimeout(() => {
+        setCancelable(false);
+      }, cancelableTime - currentTime);
+    }
+  }, []);
+
+  const isActive = status === "created";
   return !onlyBaseInfo ? (
-    <OuterShadowWrapper style={s.container} height={wp(60)} width={wp(80)}>
+    <OuterShadowWrapper
+      style={s.container}
+      height={hp(100) < 1000 ? wp(60) : 300}
+      width={wp(80)}
+    >
       <View style={s.inner}>
         <View>
           <View style={s.header}>
@@ -107,6 +165,90 @@ const HistoryItem = ({ item = {}, onlyBaseInfo, containerStyle }) => {
               )}
             </View>
           </View>
+          {!!hours || !!minutes ? (
+            <View style={s.row}>
+              <Text
+                style={classnames(
+                  s.bold,
+                  [s.textActive, isActive],
+                  [s.textNotActive, !isActive]
+                )}
+              >
+                Czas
+              </Text>
+              <View style={s.rowMainContent}>
+                {!!hours && (
+                  <View style={s.rowSection}>
+                    <View>
+                      <Text
+                        style={classnames(
+                          s.label,
+                          [s.textActive, isActive],
+                          [s.textNotActive, !isActive]
+                        )}
+                      >
+                        godziny:
+                      </Text>
+                      <Text
+                        style={classnames(
+                          s.bold,
+                          [s.textActive, isActive],
+                          [s.textNotActive, !isActive]
+                        )}
+                      >
+                        {hours}
+                      </Text>
+                    </View>
+                  </View>
+                )}
+                <View style={s.rowSection}>
+                  <View>
+                    <Text
+                      style={classnames(
+                        s.label,
+                        [s.textActive, isActive],
+                        [s.textNotActive, !isActive]
+                      )}
+                    >
+                      minuty:
+                    </Text>
+                    <Text
+                      style={classnames(
+                        s.bold,
+                        [s.textActive, isActive],
+                        [s.textNotActive, !isActive]
+                      )}
+                    >
+                      {minutes}
+                    </Text>
+                  </View>
+                </View>
+              </View>
+            </View>
+          ) : (
+            <View style={s.row}>
+              <Text
+                style={classnames(
+                  s.bold,
+                  [s.textActive, isActive],
+                  [s.textNotActive, !isActive]
+                )}
+              >
+                Czas
+              </Text>
+              <View style={s.rowMainContent}>
+                <Text
+                  style={classnames(
+                    s.bold,
+                    [s.textActive, isActive],
+                    [s.textNotActive, !isActive]
+                  )}
+                >
+                  Jak najszybciej
+                </Text>
+              </View>
+            </View>
+          )}
           <View style={s.row}>
             <Text
               style={classnames(
@@ -176,81 +318,156 @@ const HistoryItem = ({ item = {}, onlyBaseInfo, containerStyle }) => {
             </View>
           </View>
         </View>
-        <Text
-          style={classnames(
-            s.bold,
-            s.priceText,
-            [s.titleActive, isActive],
-            [s.textNotActive, !isActive]
+        <View style={s.row}>
+          <Text
+            style={classnames(
+              s.bold,
+              s.priceText,
+              [s.titleActive, isActive],
+              [s.textNotActive, !isActive]
+            )}
+          >
+            {price} zł
+          </Text>
+          {isCancelable && (
+            <Button
+              style={s.cancelButton}
+              textStyle={s.cancelButtonText}
+              onPress={cancelOrderHandler}
+              title="Anuluj"
+            />
           )}
-        >
-          {price} zł
-        </Text>
+        </View>
       </View>
     </OuterShadowWrapper>
   ) : (
     <View style={containerStyle}>
-      <View style={s.row}>
-        <Text
-          style={classnames(
-            s.bold,
-            [s.textActive, isActive],
-            [s.textNotActive, !isActive]
-          )}
-        >
-          Paczka
-        </Text>
-        <View style={s.rowMainContent}>
-          {!!maxWeight && (
-            <View style={s.rowSection}>
-              <View>
-                <Text
-                  style={classnames(
-                    s.label,
-                    [s.textActive, isActive],
-                    [s.textNotActive, !isActive]
-                  )}
-                >
-                  waga do:
-                </Text>
-                <Text
-                  style={classnames(
-                    s.bold,
-                    [s.textActive, isActive],
-                    [s.textNotActive, !isActive]
-                  )}
-                >
-                  {maxWeight}kg
-                </Text>
+      {(!!maxWeight || !!maxHeight) && (
+        <View style={s.row}>
+          <Text
+            style={classnames(
+              s.bold,
+              [s.textActive, isActive],
+              [s.textNotActive, !isActive]
+            )}
+          >
+            Paczka
+          </Text>
+          <View style={s.rowMainContent}>
+            {!!maxWeight && (
+              <View style={s.rowSection}>
+                <View>
+                  <Text
+                    style={classnames(
+                      s.label,
+                      [s.textActive, isActive],
+                      [s.textNotActive, !isActive]
+                    )}
+                  >
+                    waga do:
+                  </Text>
+                  <Text
+                    style={classnames(
+                      s.bold,
+                      [s.textActive, isActive],
+                      [s.textNotActive, !isActive]
+                    )}
+                  >
+                    {maxWeight}kg
+                  </Text>
+                </View>
               </View>
-            </View>
-          )}
-          {!!maxHeight && (
-            <View style={s.rowSection}>
-              <View>
-                <Text
-                  style={classnames(
-                    s.label,
-                    [s.textActive, isActive],
-                    [s.textNotActive, !isActive]
-                  )}
-                >
-                  rozmiar do:
-                </Text>
-                <Text
-                  style={classnames(
-                    s.bold,
-                    [s.textActive, isActive],
-                    [s.textNotActive, !isActive]
-                  )}
-                >
-                  {maxHeight}cm
-                </Text>
+            )}
+            {!!maxHeight && (
+              <View style={s.rowSection}>
+                <View>
+                  <Text
+                    style={classnames(
+                      s.label,
+                      [s.textActive, isActive],
+                      [s.textNotActive, !isActive]
+                    )}
+                  >
+                    rozmiar do:
+                  </Text>
+                  <Text
+                    style={classnames(
+                      s.bold,
+                      [s.textActive, isActive],
+                      [s.textNotActive, !isActive]
+                    )}
+                  >
+                    {maxHeight}cm
+                  </Text>
+                </View>
               </View>
-            </View>
-          )}
+            )}
+          </View>
         </View>
-      </View>
+      )}
+      {(!!hours || !!minutes) && (
+        <View style={s.row}>
+          <Text
+            style={classnames(
+              s.bold,
+              [s.textActive, isActive],
+              [s.textNotActive, !isActive]
+            )}
+          >
+            Czas
+          </Text>
+          <View style={s.rowMainContent}>
+            {!!hours && (
+              <View style={s.rowSection}>
+                <View>
+                  <Text
+                    style={classnames(
+                      s.label,
+                      [s.textActive, isActive],
+                      [s.textNotActive, !isActive]
+                    )}
+                  >
+                    godziny:
+                  </Text>
+                  <Text
+                    style={classnames(
+                      s.bold,
+                      [s.textActive, isActive],
+                      [s.textNotActive, !isActive]
+                    )}
+                  >
+                    {hours}
+                  </Text>
+                </View>
+              </View>
+            )}
+            {!!minutes && (
+              <View style={s.rowSection}>
+                <View>
+                  <Text
+                    style={classnames(
+                      s.label,
+                      [s.textActive, isActive],
+                      [s.textNotActive, !isActive]
+                    )}
+                  >
+                    minuty:
+                  </Text>
+                  <Text
+                    style={classnames(
+                      s.bold,
+                      [s.textActive, isActive],
+                      [s.textNotActive, !isActive]
+                    )}
+                  >
+                    {minutes}
+                  </Text>
+                </View>
+              </View>
+            )}
+          </View>
+        </View>
+      )}
       <View style={s.row}>
         <Text
           style={classnames(
@@ -334,4 +551,18 @@ const HistoryItem = ({ item = {}, onlyBaseInfo, containerStyle }) => {
   );
 };
 
-export default HistoryItem;
+const mapDispatchToProps = (dispatch) => ({
+  cancelOrder: (id) => dispatch(cancelOrderAction(id)),
+  showModal: (title, desc, onResolve) =>
+    dispatch(
+      showModalAction(
+        title,
+        desc,
+        () => {},
+        onResolve,
+        () => {}
+      )
+    ),
+});
+
+export default connect(null, mapDispatchToProps)(HistoryItem);

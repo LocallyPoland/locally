@@ -13,6 +13,7 @@ const HorizontalScrollPicker = ({
   itemsStep = 1,
 }) => {
   const [itemWidth, setItemWidth] = useState(0);
+  const [isScrollByClick, setScrollByClick] = useState(false);
 
   const data = useMemo(() => {
     return [...Array(numberOfItems).keys()].map((item, id) => ({
@@ -25,8 +26,14 @@ const HorizontalScrollPicker = ({
   const onScroll = ({ nativeEvent }) => {
     const { x } = nativeEvent.contentOffset;
     const { width: layoutWidth } = nativeEvent.layoutMeasurement;
+    const { width: contentWidth } = nativeEvent.contentSize;
+
     if (x === 0) {
       setActiveItem(0);
+      return;
+    }
+    if (Math.round(x + layoutWidth) === contentWidth) {
+      setActiveItem((data.length - 1) * itemsStep);
       return;
     }
     const value =
@@ -34,12 +41,9 @@ const HorizontalScrollPicker = ({
     setActiveItem(value * itemsStep);
   };
 
-  // const onMomentumScrollEnd = ({ nativeEvent }) => {
-  //   scrollRef.current.scrollToIndex({
-  //     index:
-  //       Math.floor(activeItem / itemsStep) > 0 ? activeItem / itemsStep - 1 : 0,
-  //   });
-  // };
+  const onItemPress = ({ title, index }) => {
+    setActiveItem(+title);
+  };
 
   return (
     <View>
@@ -58,19 +62,20 @@ const HorizontalScrollPicker = ({
           })}
           showsHorizontalScrollIndicator={false}
           style={s.list}
-          renderItem={({ item, onPress = () => {}, index }) => (
+          renderItem={({ item, index }) => (
             <TouchableOpacity
               onLayout={({ nativeEvent }) => {
                 if (!itemWidth) {
                   setItemWidth(nativeEvent.layout.width);
                 }
               }}
+              key={`scrollpicker${index}`}
               style={classnames(
                 s.item,
                 [s.activeItem, `${activeItem}` === item.title],
                 [s.firstItem, index === 0]
               )}
-              onPress={onPress}
+              onPress={() => onItemPress({ ...item, index })}
             >
               <Text
                 style={classnames(s.text, [

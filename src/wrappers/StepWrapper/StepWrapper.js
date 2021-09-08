@@ -35,10 +35,13 @@ const StepWrapper = ({
   numberOfSteps,
   setStepNumber,
   onBackPress,
+  stepsHistory,
 }) => {
   const redirectToStep = (number) => setStepNumber(number || stepNumber + 1);
 
   useEffect(() => {}, []);
+
+  console.log("valid steps ===", stepsHistory);
 
   return (
     <MainWrapper {...{ onBackPress }}>
@@ -51,6 +54,7 @@ const StepWrapper = ({
                 return (
                   <TouchableWithoutFeedback
                     key={i}
+                    disabled={!stepsHistory?.includes(i + 1)}
                     onPress={() => redirectToStep(i + 1)}
                   >
                     <View style={s.step} key={`step${i}`}>

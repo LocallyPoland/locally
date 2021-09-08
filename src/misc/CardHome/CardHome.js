@@ -1,15 +1,16 @@
 import React from "react";
 import s from "./CardHome.s";
 import InnerShadowWrapper from "../../wrappers/InnerShadowWrapper/InnerShadowWrapper";
-import SvgUri from "react-native-svg-uri";
 import { Text, TouchableHighlight, View, Image } from "react-native";
 import { appColors } from "../../styles/styles";
-import { widthPercentageToDP as wp } from "react-native-responsive-screen";
-import { mwp } from "../../utils/utils";
+import classnames from "classnames-react-native";
 
-const Wrapper = ({ children, style, ...rest }) => (
+const Wrapper = ({ children, style, fullscreen, ...rest }) => (
   <TouchableHighlight
-    style={{ ...s.cardContainer, ...style }}
+    style={classnames(s.cardContainer, style, [
+      s.cardContainerFullScreen,
+      fullscreen,
+    ])}
     underlayColor={appColors.lightPurple}
     {...rest}
   >
@@ -17,12 +18,22 @@ const Wrapper = ({ children, style, ...rest }) => (
   </TouchableHighlight>
 );
 
-const CardHome = ({ icon, text, redirect }) => {
+const CardHome = ({ fullscreen, redirect, text, icon }) => {
   return (
-    <InnerShadowWrapper {...{ Wrapper }} onPress={redirect}>
-      <View style={s.card}>
-        <Image style={s.cardImage} source={icon} />
-        <Text style={s.cardTitle}>{text}</Text>
+    <InnerShadowWrapper
+      Wrapper={(props) => <Wrapper {...props} {...{ fullscreen }} />}
+      onPress={redirect}
+    >
+      <View style={classnames(s.card, [s.cardFullscreen, fullscreen])}>
+        <Image
+          style={classnames(s.cardImage, [s.cardImageFullscreen, fullscreen])}
+          source={icon}
+        />
+        <Text
+          style={classnames(s.cardTitle, [s.cardTitleFullscreen, fullscreen])}
+        >
+          {text}
+        </Text>
       </View>
     </InnerShadowWrapper>
   );

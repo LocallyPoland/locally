@@ -13,7 +13,6 @@ export default StyleSheet.create({
   },
   buttonText: {
     color: "#fff",
-    textTransform: "capitalize",
     textAlign: "center",
     fontSize: 18,
     // lineHeight: 20,

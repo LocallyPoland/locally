@@ -9,6 +9,7 @@ export default StyleSheet.create({
   tabNumber: {
     color: `${appColors.lightGray}40`,
     fontFamily: "PoppinsRegular",
+    fontSize: wp(5),
   },
   mainContent: {
     justifyContent: "space-between",
@@ -21,10 +22,12 @@ export default StyleSheet.create({
     marginLeft: 20,
     color: appColors.text,
     marginBottom: 5,
+    fontSize: wp(4),
   },
   tabText: {
     color: appColors.text,
     marginBottom: 5,
+    fontSize: wp(4),
   },
   barsContainer: {
     flexDirection: "row",

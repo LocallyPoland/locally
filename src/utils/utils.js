@@ -2,7 +2,7 @@ import {
   heightPercentageToDP as hp,
   widthPercentageToDP as wp,
 } from "react-native-responsive-screen";
-import { min } from "react-native-reanimated";
+import { store } from "../store/store";
 
 export const stepNames = [
   "Wprowadź adres\nodbioru",
@@ -16,8 +16,23 @@ export const immediateStepNames = [
   "Wprowadź adres\nodbioru",
   "Wprowadź adres\ndostawy",
   "Zaznacz gabaryty\nprzesyłki",
-  "Podsumowanie i\nforma płatnoci",
+  "Podsumowanie",
 ];
+
+export const checkAppDisabled = (isComplex) => {
+  const { timeStart, timeStop, switcher } = store.getState().base.settings;
+  console.log("time start ===", timeStart);
+  console.log("time stop ===", timeStop);
+  const hours = new Date().getHours();
+  const isTimeEarly = timeStart > hours;
+  const isTimeLate = timeStop < hours;
+  if (isComplex) {
+    return { isTimeEarly, isTimeLate, isSwitcher: switcher };
+  }
+  console.log("is time early", isTimeEarly);
+  console.log("is time late", isTimeLate);
+  return switcher || isTimeEarly || isTimeLate;
+};
 
 export const mwp = (widthPercent, maxWidth, minWidth) => {
   if (maxWidth && minWidth) {

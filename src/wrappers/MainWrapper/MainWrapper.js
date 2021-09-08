@@ -2,10 +2,14 @@ import React from "react";
 import s from "./MainWrapper.s";
 import { View, TouchableHighlight, Text, Image } from "react-native";
 import { BoxShadow } from "react-native-shadow";
+import {
+  heightPercentageToDP as hp,
+  widthPercentageToDP as wp,
+} from "react-native-responsive-screen";
 
 const shadowOpt = {
-  width: 30,
-  height: 20,
+  width: wp(8),
+  height: wp(8),
   color: "#ffffff",
   border: 10,
   radius: 5,
@@ -32,8 +36,9 @@ const MainWrapper = ({
           <BoxShadow setting={shadowOpt}>
             <View style={s.backButtonInner}>
               <Image
-                width={24}
-                height={24}
+                width={wp(6)}
+                height={wp(6)}
+                style={{ width: wp(6), height: wp(6) }}
                 source={require("../../../assets/icons/icon-back.png")}
               />
             </View>

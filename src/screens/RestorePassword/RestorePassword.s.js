@@ -7,13 +7,23 @@ import {
 import React from "react";
 
 export default StyleSheet.create({
+  container: {
+    justifyContent: "flex-end",
+    flex: 1,
+    marginTop: hp(5),
+  },
+  title: {
+    fontFamily: "PoppinsBold",
+    color: appColors.text,
+    fontSize: 28,
+    textAlign: "center",
+  },
   imageContainer: {
     alignItems: "center",
   },
   image: {
-    width: wp(50),
-    // height: wp(50),
-    height: hp(100) <= 700 ? 120 : wp(40),
+    width: hp(100) <= 700 ? 120 : wp(70),
+    height: hp(100) <= 700 ? 120 : wp(70),
     resizeMode: "contain",
   },
   infoContainer: {
@@ -21,6 +31,7 @@ export default StyleSheet.create({
     padding: 30,
     borderColor: "#fff",
     borderWidth: 2,
+    borderBottomWidth: 0,
     borderTopLeftRadius: 30,
     borderTopRightRadius: 30,
     flex: 1,

@@ -7,7 +7,9 @@ import { appColors } from "../../styles/styles";
 
 export default StyleSheet.create({
   container: {
-    marginTop: hp(10),
+    marginTop: hp(5),
+    justifyContent: "space-between",
+    flex: 1,
   },
   title: {
     fontFamily: "PoppinsBold",
@@ -20,9 +22,17 @@ export default StyleSheet.create({
     padding: 30,
     borderColor: "#fff",
     borderWidth: 2,
+    borderBottomWidth: 0,
     borderTopLeftRadius: 30,
     borderTopRightRadius: 30,
     flex: 1,
+  },
+  facebookButtonContainer: {
+    paddingVertical: 5,
+    paddingHorizontal: 20,
+    borderRadius: 15,
+    alignItems: "center",
+    backgroundColor: "#157df2",
   },
   inputContainer: {
     marginBottom: 5,
