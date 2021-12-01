@@ -18,6 +18,7 @@ const HistoryItem = ({
   containerStyle,
   cancelOrder,
   showModal,
+  isImmediateOrder
 }) => {
   const {
     number,
@@ -53,12 +54,6 @@ const HistoryItem = ({
       () => cancelOrder(_id)
     );
   };
-
-  console.log("maxWeight ===", maxWeight);
-  console.log("maxHeight ===", maxHeight);
-  console.log("isonlybase ===", onlyBaseInfo);
-
-  console.log("isCancelable ===", isCancelable);
 
   useEffect(() => {
     console.log(
@@ -405,7 +400,7 @@ const HistoryItem = ({
           </View>
         </View>
       )}
-      {(!!hours || !!minutes) && (
+      {!isImmediateOrder && (!!hours || !!minutes) && (
         <View style={s.row}>
           <Text
             style={classnames(

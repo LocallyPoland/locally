@@ -14,6 +14,7 @@ const Step5 = ({
   errors,
   handleChange,
   showErrorModal,
+  isImmediateOrder
 }) => {
   const redirectToAddCard = () =>
     navigation.navigate("AddCard", {
@@ -41,6 +42,7 @@ const Step5 = ({
             <HistoryItem
               onlyBaseInfo
               containerStyle={s.infoContainer}
+              isImmediateOrder
               item={{
                 status,
                 price: sum,
@@ -61,7 +63,7 @@ const Step5 = ({
               multiline
               value={comments}
               placeholder="pietro II, przesyłkę proszę zostawić pod drzwiami"
-              onChangeText={handleChange("comments")}
+              onChangeText={comments.length <= 150 ? handleChange("comments") : null}
             />
             <View style={{ ...s.textContainer, marginBottom: 10 }}>
               <View style={s.textLine} />

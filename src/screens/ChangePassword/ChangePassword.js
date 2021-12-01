@@ -9,7 +9,6 @@ import {
   Text,
   TouchableOpacity,
   View,
-  Animated,
 } from "react-native";
 import Input from "../../misc/Input/Input";
 import Button from "../../misc/Button/Button";
@@ -38,11 +37,10 @@ const ChangePassword = ({
   const { email } = route.params;
 
   const sendCodeAgain = () => {
-    sendCodeRequest(email).then(() => {
+    sendCodeRequest({email}).then(() => {
       setTimer(30);
       const interval = setInterval(() => {
         setIntervalObject(interval);
-        console.log("timer ===", timer);
         setTimer((prev) => {
           if (prev > 0) {
             return prev - 1;
@@ -166,9 +164,8 @@ const formikHOC = withFormik({
     { props: { route, changePassword, showModal, navigation } }
   ) => {
     const isSuccess = await changePassword(route.params.email, password, code);
-    console.log("is success ===", isSuccess);
     if (isSuccess) {
-      navigation.navigate("Home");
+      navigation.navigate("Login");
     } else {
       showModal("Bląd logowania", "Coś poszło nie tak. Spróbuj ponownie.");
     }

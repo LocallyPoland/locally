@@ -50,8 +50,10 @@ export const postOrder = (order, token) => {
   });
 };
 
-export const deleteOrder = (orderId, token) => {
-  return _axios.delete(`/order/${orderId}`, {
+export const deleteOrder = (orderId, status, token) => {
+  return _axios.patch(`/order/${orderId}`,
+  { status },
+   {
     headers: {
       Authorization: `Bearer ${token}`,
     },

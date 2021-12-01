@@ -29,8 +29,6 @@ const Navigation = ({ profile, getSettings }) => {
   const fontState = FontState();
   const isLogged = !!(profile._id && profile.isVerified);
 
-  console.log("profile ===", profile);
-
   useEffect(() => {
     (async () => {
       await getSettings();

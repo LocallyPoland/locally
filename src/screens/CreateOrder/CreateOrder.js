@@ -91,6 +91,7 @@ const CreateOrder = (props) => {
           {stepNumber === 4 && (
             <Step5
               {...props}
+              isImmediateOrder={isImmediateOrder}
               stepNumber={4}
               onSubmit={handleSubmit}
               {...{ stepNumber }}
@@ -123,7 +124,7 @@ const CreateOrder = (props) => {
 const formikHOC = withFormik({
   mapPropsToValues: ({ route, settings }) => {
     const date = new Date(new Date().getTime() + 3600000);
-    console.log("date ===", date);
+    console.log("date IS ===", date);
     const isImmediateOrder = route?.params?.isImmediateOrder;
 
     return {

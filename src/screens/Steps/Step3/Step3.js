@@ -18,6 +18,7 @@ const Step3 = ({
 }) => {
   const { hours: selectedHours, minutes: selectedMinutes } =
     values.deliveryTime || {};
+    console.log('values', values);
 
   const submitHandler = () => {
     if (errors.deliveryDate) {
@@ -45,7 +46,7 @@ const Step3 = ({
         deliveryTime: "time must be at least hour after current time",
       });
     }
-    console.log("date ===", new Date().setHours(hours));
+    console.log("currentDate ===", new Date().setHours(hours));
     setValues({
       ...values,
       deliveryTime: {
@@ -66,12 +67,14 @@ const Step3 = ({
   };
 
   useEffect(() => {
-    const date = new Date();
+    const date = new Date(new Date().toISOString('en-US', { timeZone: 'Europe/Warsaw' }));
+    console.log('dateLog:', date);
     date.setHours(selectedHours, selectedMinutes);
     setValues({ ...values, deliveryDate: date });
   }, [selectedHours, selectedMinutes]);
 
   console.log("errors ===", errors);
+  console.log("test time===", new Date(Date.now()));
 
   return (
     <ScrollView nestedScrollEnabled>

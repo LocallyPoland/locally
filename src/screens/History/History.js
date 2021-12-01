@@ -12,6 +12,7 @@ const History = ({ navigation, getHistory, history }) => {
       getHistory();
     }
   }, []);
+  console.log('history', history);
   return (
     <MainWrapper
       onBackPress={navigation.goBack}
@@ -31,7 +32,7 @@ const History = ({ navigation, getHistory, history }) => {
                   key={item._id}
                   item={{
                     ...item,
-                    number: i + 1,
+                    number: item.numOfOrder,
                     status: item.status,
                     maxWeight: item.weight,
                     maxHeight: item.length,

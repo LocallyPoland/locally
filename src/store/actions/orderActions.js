@@ -14,9 +14,9 @@ export const cancelOrderAction = (orderId) => {
   return async (dispatch) => {
     try {
       const { token } = store.getState().profile;
-      console.log("token ===", token);
-      const response = await deleteOrder(orderId, token);
-      console.log("create order response ===", response?.data);
+      const response = await deleteOrder(orderId, 
+        "cancelled", 
+        token);
       dispatch({ type: DELETE_HISTORY_ITEM, orderId });
     } catch (e) {
       console.log("cancelOrderAction e ===", e);

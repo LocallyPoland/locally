@@ -13,6 +13,7 @@ import CustomImage from "../../../misc/CustomImage/CustomImage";
 import ScrollPicker from "../../../misc/ScrollPicker/ScrollPicker";
 
 const Step4 = ({ values, setValues, onSubmit, stepNumber, errors }) => {
+  console.log('values', values);
   const setMailType = () => {
     setValues({
       ...values,
