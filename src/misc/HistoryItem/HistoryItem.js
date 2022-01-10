@@ -32,6 +32,7 @@ const HistoryItem = ({
     minutes,
     createdAt,
   } = item;
+  // console.log('ITEM:', item);
   const statusText = useMemo(() => {
     switch (status) {
       case "coming":

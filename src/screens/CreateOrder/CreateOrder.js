@@ -168,10 +168,10 @@ const formikHOC = withFormik({
     if (!isImmediateOrder && deliveryTime) {
       time = new Date(
         new Date().setHours(+deliveryTime.hours, +deliveryTime.minutes)
-      ).toUTCString();
+      ).toLocaleString('en-US', { timeZone: 'Europe/Warsaw' });
     }
 
-    console.log("user ===", user);
+    console.log("timeUTC ===", time);
 
     const isSuccess = await createOrder(
       { ...values, deliveryTime: time },

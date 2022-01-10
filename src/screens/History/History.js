@@ -27,6 +27,7 @@ const History = ({ navigation, getHistory, history }) => {
               const orderDate =
                 item.deliveryTime && new Date(item.deliveryTime);
               console.log("order date ===", orderDate);
+              console.log("order hour ===", orderDate?.getUTCHours());
               return (
                 <HistoryItem
                   key={item._id}
@@ -40,7 +41,7 @@ const History = ({ navigation, getHistory, history }) => {
                       from: item.pickUp,
                       to: item.deliveryAddress,
                     },
-                    hours: orderDate?.getHours(),
+                    hours: orderDate?.getUTCHours(),
                     minutes: orderDate?.getMinutes(),
                     price: item.sum,
                   }}
